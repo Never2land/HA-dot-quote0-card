@@ -39,33 +39,33 @@ Monitor device status, preview the current display, and push text or image conte
 
 ## Configuration
 
-Add the card to any dashboard view. The `entity` value is the entity prefix for your device (visible in the card editor's device dropdown):
+Use the **visual card editor** — add a new card, search for **Dot. Quote/0**, and pick your device from the dropdown. All configured Quote/0 devices are discovered automatically from the HA entity and device registries.
+
+Or add manually in YAML:
 
 ```yaml
 type: custom:dot-quote0-card
-entity: dot_quote0_ABCD1234ABCD
+device_id: ABCD1234ABCD
 ```
 
 ### Options
 
-| Option            | Type    | Default      | Description                                                     |
-| ----------------- | ------- | ------------ | --------------------------------------------------------------- |
-| `entity`          | string  | **required** | Entity prefix for the device (auto-discovered from integration) |
-| `show_preview`    | boolean | `true`       | Show the e-ink display preview                                  |
-| `show_send_text`  | boolean | `true`       | Show the Send Text controls                                     |
-| `show_send_image` | boolean | `true`       | Show the Send Image controls                                    |
+| Option            | Type    | Default      | Description                                                            |
+| ----------------- | ------- | ------------ | ---------------------------------------------------------------------- |
+| `device_id`       | string  | **required** | Device serial (auto-populated when using the visual editor)            |
+| `show_preview`    | boolean | `true`       | Show the e-ink display preview                                         |
+| `show_send_text`  | boolean | `true`       | Show the Send Text controls                                            |
+| `show_send_image` | boolean | `true`       | Show the Send Image controls                                           |
 
 ### Full example
 
 ```yaml
 type: custom:dot-quote0-card
-entity: dot_quote0_ABCD1234ABCD
+device_id: ABCD1234ABCD
 show_preview: true
 show_send_text: true
 show_send_image: false
 ```
-
-You can also use the **visual card editor** — add a new card, search for **Dot. Quote/0**, and pick your device from the dropdown. All discovered Quote/0 devices are listed automatically.
 
 ## Card Layout
 

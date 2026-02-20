@@ -1,6 +1,6 @@
 export interface DotQuote0CardConfig {
   type: string;
-  entity: string;
+  device_id: string;
   show_preview?: boolean;
   show_send_text?: boolean;
   show_send_image?: boolean;
@@ -14,8 +14,13 @@ export interface HassEntityState {
   last_updated: string;
 }
 
+export interface HassConnection {
+  sendMessagePromise(msg: Record<string, any>): Promise<any>;
+}
+
 export interface Hass {
   states: Record<string, HassEntityState>;
+  connection: HassConnection;
   callService(
     domain: string,
     service: string,
@@ -25,21 +30,25 @@ export interface Hass {
 
 export const DOMAIN = "dot_quote0";
 
-export const ENTITY_SUFFIXES = {
-  power_state: "sensor",
-  battery_status: "sensor",
-  wifi_signal: "sensor",
-  firmware_version: "sensor",
-  last_render: "sensor",
-  next_render_battery: "sensor",
-  next_render_power: "sensor",
-  online: "binary_sensor",
-  next_content: "button",
-  send_text: "button",
-  send_image: "button",
-  text_title: "text",
-  text_message: "text",
-  text_signature: "text",
-  image_data: "text",
-  dither_type: "select",
-} as const;
+export interface EntityRegistryEntry {
+  entity_id: string;
+  unique_id: string;
+  platform: string;
+  device_id: string;
+}
+
+export interface DeviceRegistryEntry {
+  id: string;
+  name: string;
+  identifiers: [string, string][];
+  manufacturer: string;
+  model: string;
+  sw_version: string;
+}
+
+export interface DotDevice {
+  ha_device_id: string;
+  dot_device_id: string;
+  name: string;
+  entities: Record<string, string>;
+}
