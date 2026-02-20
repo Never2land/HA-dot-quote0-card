@@ -7,7 +7,6 @@ import "./editor";
 
 @customElement("dot-quote0-card")
 export class DotQuote0Card extends LitElement {
-  @property({ attribute: false }) public hass!: Hass;
   @state() private _config!: DotQuote0CardConfig;
   @state() private _device: DotDevice | undefined;
   @state() private _resolved = false;
@@ -21,6 +20,31 @@ export class DotQuote0Card extends LitElement {
   @state() private _toast = "";
   @state() private _toastType: "success" | "error" = "success";
   @state() private _sending = false;
+
+  private _hass!: Hass;
+
+  set hass(hass: Hass) {
+    const old = this._hass;
+    this._hass = hass;
+    this.requestUpdate("hass", old);
+    if (hass && this._config?.device_id && !this._resolved) {
+      this._resolveDevice();
+    }
+  }
+
+  get hass(): Hass {
+    return this._hass;
+  }
+
+  private async _resolveDevice(): Promise<void> {
+    try {
+      const devices = await discoverDevices(this._hass);
+      this._device = findDevice(devices, this._config.device_id);
+      this._resolved = true;
+    } catch {
+      // Will retry on next hass update
+    }
+  }
 
   static getConfigElement() {
     return document.createElement("dot-quote0-card-editor");
@@ -41,6 +65,9 @@ export class DotQuote0Card extends LitElement {
     }
     this._config = config;
     this._resolved = false;
+    if (this._hass) {
+      this._resolveDevice();
+    }
   }
 
   getCardSize(): number {
@@ -49,18 +76,6 @@ export class DotQuote0Card extends LitElement {
 
   getGridOptions() {
     return { rows: 8, columns: 12, min_rows: 4, min_columns: 6 };
-  }
-
-  protected async updated(changed: Map<string, unknown>): Promise<void> {
-    if ((changed.has("hass") || changed.has("_config")) && this.hass && this._config?.device_id && !this._resolved) {
-      try {
-        const devices = await discoverDevices(this.hass);
-        this._device = findDevice(devices, this._config.device_id);
-        this._resolved = true;
-      } catch {
-        // Will retry on next hass update
-      }
-    }
   }
 
   // ---- Entity helpers: use registry-resolved entity_ids ----
