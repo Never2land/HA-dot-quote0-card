@@ -25,7 +25,6 @@ export interface Hass {
     domain: string,
     service: string,
     data?: Record<string, any>,
-    target?: { device_id?: string; entity_id?: string; area_id?: string },
   ): Promise<void>;
 }
 

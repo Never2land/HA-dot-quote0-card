@@ -144,17 +144,13 @@ export class DotQuote0Card extends LitElement {
     if (this._sending) return;
     this._sending = true;
     try {
-      await this.hass.callService(
-        DOMAIN,
-        "send_text",
-        {
-          title: this._textTitle || undefined,
-          message: this._textMessage || undefined,
-          signature: this._textSignature || undefined,
-          refresh_now: true,
-        },
-        { device_id: this._device!.ha_device_id },
-      );
+      await this.hass.callService(DOMAIN, "send_text", {
+        serial: this._device!.dot_device_id,
+        title: this._textTitle || undefined,
+        message: this._textMessage || undefined,
+        signature: this._textSignature || undefined,
+        refresh_now: true,
+      });
       this._showToast("Text sent!", "success");
     } catch (e: any) {
       this._showToast(e.message || "Failed to send", "error");
@@ -167,17 +163,13 @@ export class DotQuote0Card extends LitElement {
     if (this._sending || !this._imageData) return;
     this._sending = true;
     try {
-      await this.hass.callService(
-        DOMAIN,
-        "send_image",
-        {
-          image: this._imageData,
-          dither_type: this._ditherType,
-          border: this._border,
-          refresh_now: true,
-        },
-        { device_id: this._device!.ha_device_id },
-      );
+      await this.hass.callService(DOMAIN, "send_image", {
+        serial: this._device!.dot_device_id,
+        image: this._imageData,
+        dither_type: this._ditherType,
+        border: this._border,
+        refresh_now: true,
+      });
       this._showToast("Image sent!", "success");
     } catch (e: any) {
       this._showToast(e.message || "Failed to send", "error");
