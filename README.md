@@ -16,7 +16,8 @@ Monitor device status, preview the current display, and push text or image conte
 - **Send Text** — compose and push text content (title, message, signature) directly from the card
 - **Send Image** — upload a PNG, choose dither algorithm and border color, then push to the device
 - **Next Content** — cycle the device to its next scheduled content
-- **Visual editor** — configure the card from the dashboard UI (device ID + section toggles)
+- **Device picker** — select from discovered Quote/0 devices already in Home Assistant (no manual serial entry)
+- **Visual editor** — configure the card from the dashboard UI (device picker + section toggles)
 
 ## Installation
 
@@ -38,33 +39,33 @@ Monitor device status, preview the current display, and push text or image conte
 
 ## Configuration
 
-Add the card to any dashboard view:
+Add the card to any dashboard view. The `entity` value is the entity prefix for your device (visible in the card editor's device dropdown):
 
 ```yaml
 type: custom:dot-quote0-card
-device_id: YOUR_DEVICE_SERIAL
+entity: dot_quote0_ABCD1234ABCD
 ```
 
 ### Options
 
-| Option            | Type    | Default | Description                          |
-| ----------------- | ------- | ------- | ------------------------------------ |
-| `device_id`       | string  | **required** | Device serial number from the Dot. App |
-| `show_preview`    | boolean | `true`  | Show the e-ink display preview       |
-| `show_send_text`  | boolean | `true`  | Show the Send Text controls          |
-| `show_send_image` | boolean | `true`  | Show the Send Image controls         |
+| Option            | Type    | Default      | Description                                                     |
+| ----------------- | ------- | ------------ | --------------------------------------------------------------- |
+| `entity`          | string  | **required** | Entity prefix for the device (auto-discovered from integration) |
+| `show_preview`    | boolean | `true`       | Show the e-ink display preview                                  |
+| `show_send_text`  | boolean | `true`       | Show the Send Text controls                                     |
+| `show_send_image` | boolean | `true`       | Show the Send Image controls                                    |
 
 ### Full example
 
 ```yaml
 type: custom:dot-quote0-card
-device_id: ABCD1234ABCD
+entity: dot_quote0_ABCD1234ABCD
 show_preview: true
 show_send_text: true
 show_send_image: false
 ```
 
-You can also configure everything through the visual card editor — just add a new card and search for **Dot. Quote/0**.
+You can also use the **visual card editor** — add a new card, search for **Dot. Quote/0**, and pick your device from the dropdown. All discovered Quote/0 devices are listed automatically.
 
 ## Card Layout
 
