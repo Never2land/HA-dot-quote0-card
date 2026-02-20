@@ -145,7 +145,7 @@ export class DotQuote0Card extends LitElement {
     this._sending = true;
     try {
       await this.hass.callService(DOMAIN, "send_text", {
-        device_id: this._config.device_id,
+        device_id: this._device!.ha_device_id,
         title: this._textTitle || undefined,
         message: this._textMessage || undefined,
         signature: this._textSignature || undefined,
@@ -164,7 +164,7 @@ export class DotQuote0Card extends LitElement {
     this._sending = true;
     try {
       await this.hass.callService(DOMAIN, "send_image", {
-        device_id: this._config.device_id,
+        device_id: this._device!.ha_device_id,
         image: this._imageData,
         dither_type: this._ditherType,
         border: this._border,
