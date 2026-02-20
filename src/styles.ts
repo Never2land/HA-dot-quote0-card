@@ -22,20 +22,44 @@ export const cardStyles = css`
     overflow: hidden;
   }
 
-  /* ---- Header ---- */
+  /* ---- Hero preview — full-width, touches card edges ---- */
 
-  .md3-header {
+  .hero-frame {
+    width: 100%;
+    aspect-ratio: 296 / 152;
+    background: var(--md-surface-var);
+    overflow: hidden;
+    display: block;
+  }
+
+  .hero-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+  }
+
+  .hero-fallback {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: var(--md-on-surface);
+  }
+
+  /* ---- Device header ---- */
+
+  .device-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px 10px;
-    background: color-mix(in srgb, var(--md-primary) 7%, var(--md-surface));
+    padding: 14px 16px 4px;
   }
 
-  .header-info {
+  .device-header-left {
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
   }
 
   .device-name {
@@ -51,7 +75,7 @@ export const cardStyles = css`
     letter-spacing: 0.03em;
   }
 
-  /* Online pill — MD3 assist chip style */
+  /* Online pill */
   .online-pill {
     display: inline-flex;
     align-items: center;
@@ -90,53 +114,42 @@ export const cardStyles = css`
     background: var(--md-error);
   }
 
-  /* ---- Status grid — 3 equal columns ---- */
+  /* ---- Inline status chips ---- */
 
-  .stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    border-top: 1px solid var(--md-outline);
-  }
-
-  .stat-cell {
+  .status-row {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
-    padding: 10px 6px 9px;
-    gap: 3px;
-    border-right: 1px solid var(--md-outline);
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    padding: 2px 16px 2px;
   }
 
-  .stat-cell.no-border {
-    border-right: none;
+  .stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.82em;
+    font-weight: 500;
+    color: var(--md-on-surface);
   }
 
-  .stat-icon {
-    --mdc-icon-size: 17px;
+  .chip-icon {
+    --mdc-icon-size: 15px;
     color: var(--md-primary);
   }
 
-  .stat-icon.battery {
+  .chip-icon.battery {
     color: color-mix(in srgb, var(--md-success) 80%, var(--md-primary));
   }
 
-  .stat-icon.wifi {
+  .chip-icon.wifi {
     color: color-mix(in srgb, var(--md-primary) 70%, var(--md-success));
   }
 
-  .stat-label {
-    font-size: 0.6em;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--md-on-surface-var);
-  }
-
-  .stat-value {
-    font-size: 0.8em;
-    font-weight: 600;
-    color: var(--md-on-surface);
-    line-height: 1.2;
+  .stat-sep {
+    color: var(--md-outline);
+    font-size: 0.85em;
+    user-select: none;
   }
 
   /* ---- Render-times row ---- */
@@ -146,11 +159,9 @@ export const cardStyles = css`
     align-items: center;
     flex-wrap: wrap;
     gap: 4px;
-    padding: 5px 14px 6px;
-    font-size: 0.76em;
+    padding: 2px 16px 12px;
+    font-size: 0.73em;
     color: var(--md-on-surface-var);
-    border-top: 1px solid var(--md-outline);
-    background: color-mix(in srgb, var(--md-surface-var) 55%, transparent);
   }
 
   .render-icon {
@@ -159,14 +170,10 @@ export const cardStyles = css`
     flex-shrink: 0;
   }
 
-  .render-item strong {
-    font-weight: 600;
-    color: var(--md-on-surface);
-  }
+  /* ---- Next Content row ---- */
 
-  .render-sep {
-    color: var(--md-outline);
-    padding: 0 2px;
+  .next-content-row {
+    padding: 10px 14px 10px;
   }
 
   /* ---- Divider ---- */
@@ -176,45 +183,15 @@ export const cardStyles = css`
     background: var(--md-outline);
   }
 
-  /* ---- Preview ---- */
-
-  .preview-section {
-    padding: 10px 14px 12px;
-  }
-
-  .section-label {
-    font-size: 0.62em;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--md-on-surface-var);
-    margin-bottom: 7px;
-  }
-
-  .preview-frame {
-    border-radius: var(--md-r-md);
-    overflow: hidden;
-    border: 1px solid var(--md-outline);
-    width: 100%;
-    aspect-ratio: 296 / 152;
-    background: var(--md-surface-var);
-  }
-
-  .preview-frame img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    image-rendering: pixelated;
-  }
-
-  .preview-fallback {
-    display: block;
-    width: 100%;
-    height: 100%;
-    color: var(--md-on-surface);
-  }
-
   /* ---- Expand sections ---- */
+
+  .expand-section {
+    border-top: 1px solid var(--md-outline);
+  }
+
+  .expand-section:first-of-type {
+    border-top: none;
+  }
 
   .expand-header {
     display: flex;
@@ -408,6 +385,11 @@ export const cardStyles = css`
   .md3-btn ha-icon {
     --mdc-icon-size: 16px;
     flex-shrink: 0;
+  }
+
+  .md3-btn.full-width {
+    width: 100%;
+    justify-content: center;
   }
 
   .md3-btn.filled {

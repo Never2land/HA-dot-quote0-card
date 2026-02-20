@@ -203,7 +203,46 @@ export class DotQuote0Card extends LitElement {
 
   // ---- Render ----
 
-  private _renderStatus() {
+  private _renderHero() {
+    if (this._config.show_preview === false) return nothing;
+
+    const images = this._getPreviewImages();
+    const src = images.length > 0 ? images[0] : null;
+
+    return html`
+      <div class="hero-frame">
+        ${src
+          ? html`<img class="hero-img" src="${src}" alt="Current display" />`
+          : html`
+              <svg
+                class="hero-fallback"
+                viewBox="0 0 296 152"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="No preview available"
+              >
+                <defs>
+                  <pattern id="dotgrid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <circle cx="1" cy="1" r="0.7" fill="currentColor" opacity="0.12" />
+                  </pattern>
+                </defs>
+                <rect width="296" height="152" fill="url(#dotgrid)" />
+                <rect x="108" y="38" width="80" height="52" rx="5"
+                  fill="none" stroke="currentColor" stroke-width="2" opacity="0.25" />
+                <rect x="113" y="43" width="70" height="38" rx="2"
+                  fill="currentColor" opacity="0.06" />
+                <line x1="120" y1="54" x2="176" y2="54" stroke="currentColor" stroke-width="1.5" opacity="0.18" />
+                <line x1="120" y1="62" x2="166" y2="62" stroke="currentColor" stroke-width="1.5" opacity="0.18" />
+                <line x1="120" y1="70" x2="172" y2="70" stroke="currentColor" stroke-width="1.5" opacity="0.18" />
+                <text x="148" y="116" text-anchor="middle" font-size="8"
+                  font-family="Roboto, sans-serif" letter-spacing="1"
+                  fill="currentColor" opacity="0.3">NO PREVIEW</text>
+              </svg>
+            `}
+      </div>
+    `;
+  }
+
+  private _renderInfo() {
     const online = this._isOnline();
     const power = this._stateOf("power_state");
     const battery = this._stateOf("battery_status");
@@ -219,8 +258,8 @@ export class DotQuote0Card extends LitElement {
     const battVal = battery !== "unavailable" ? battery : "—";
 
     return html`
-      <div class="md3-header">
-        <div class="header-info">
+      <div class="device-header">
+        <div class="device-header-left">
           <span class="device-name">${name}</span>
           <span class="device-fw">FW&nbsp;${firmware}</span>
         </div>
@@ -230,82 +269,46 @@ export class DotQuote0Card extends LitElement {
         </span>
       </div>
 
-      <div class="stat-grid">
-        <div class="stat-cell">
-          <ha-icon icon="mdi:lightning-bolt" class="stat-icon power"></ha-icon>
-          <span class="stat-label">Power</span>
-          <span class="stat-value">${power}</span>
-        </div>
-        <div class="stat-cell">
-          <ha-icon
-            icon="${this._batteryIcon(battery)}"
-            class="stat-icon battery"
-          ></ha-icon>
-          <span class="stat-label">Battery</span>
-          <span class="stat-value">${battVal}</span>
-        </div>
-        <div class="stat-cell no-border">
-          <ha-icon
-            icon="${this._wifiIcon(wifi)}"
-            class="stat-icon wifi"
-          ></ha-icon>
-          <span class="stat-label">Wi-Fi</span>
-          <span class="stat-value">${wifiVal}</span>
-        </div>
+      <div class="status-row">
+        <span class="stat-chip">
+          <ha-icon icon="mdi:lightning-bolt" class="chip-icon power"></ha-icon>
+          <span>${power}</span>
+        </span>
+        <span class="stat-sep">·</span>
+        <span class="stat-chip">
+          <ha-icon icon="${this._batteryIcon(battery)}" class="chip-icon battery"></ha-icon>
+          <span>${battVal}</span>
+        </span>
+        <span class="stat-sep">·</span>
+        <span class="stat-chip">
+          <ha-icon icon="${this._wifiIcon(wifi)}" class="chip-icon wifi"></ha-icon>
+          <span>${wifiVal}</span>
+        </span>
       </div>
 
       <div class="render-row">
         <ha-icon icon="mdi:history" class="render-icon"></ha-icon>
-        <span class="render-item">Last&nbsp;<strong>${lastRender}</strong></span>
-        <span class="render-sep">·</span>
+        <span>${lastRender}</span>
+        <span class="stat-sep">·</span>
         <ha-icon icon="mdi:timer-outline" class="render-icon"></ha-icon>
-        <span class="render-item">Next&nbsp;<strong>${nextPower}</strong></span>
+        <span>Next:&nbsp;${nextPower}</span>
       </div>
     `;
   }
 
-  private _renderPreview() {
-    if (this._config.show_preview === false) return nothing;
-
-    const images = this._getPreviewImages();
-    const src = images.length > 0 ? images[0] : null;
-
+  private _renderNextContent() {
+    const eid = this._eid("next_content");
+    if (!eid) return nothing;
     return html`
-      <div class="divider"></div>
-      <div class="preview-section">
-        <div class="section-label">Display Preview</div>
-        <div class="preview-frame">
-          ${src
-            ? html`<img src="${src}" alt="Current display" />`
-            : html`
-                <svg
-                  class="preview-fallback"
-                  viewBox="0 0 296 152"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-label="No preview available"
-                >
-                  <defs>
-                    <pattern id="dotgrid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                      <circle cx="1" cy="1" r="0.7" fill="currentColor" opacity="0.15" />
-                    </pattern>
-                  </defs>
-                  <rect width="296" height="152" fill="url(#dotgrid)" />
-                  <rect x="108" y="42" width="80" height="52" rx="5"
-                    fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
-                  <rect x="113" y="47" width="70" height="38" rx="2"
-                    fill="currentColor" opacity="0.07" />
-                  <line x1="120" y1="58" x2="176" y2="58" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
-                  <line x1="120" y1="66" x2="166" y2="66" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
-                  <line x1="120" y1="74" x2="172" y2="74" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
-                  <line x1="138" y1="94" x2="158" y2="94" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
-                  <line x1="148" y1="94" x2="148" y2="104" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
-                  <line x1="140" y1="104" x2="156" y2="104" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
-                  <text x="148" y="124" text-anchor="middle" font-size="9"
-                    font-family="Roboto, sans-serif" letter-spacing="0.5"
-                    fill="currentColor" opacity="0.38">NO PREVIEW AVAILABLE</text>
-                </svg>
-              `}
-        </div>
+      <div class="next-content-row">
+        <button
+          class="md3-btn tonal full-width"
+          @click=${this._handleNextContent}
+          ?disabled=${this._sending}
+        >
+          <ha-icon icon="mdi:skip-next-outline"></ha-icon>
+          Next Content
+        </button>
       </div>
     `;
   }
@@ -315,7 +318,6 @@ export class DotQuote0Card extends LitElement {
     const open = this._sendTextExpanded;
 
     return html`
-      <div class="divider"></div>
       <div class="expand-section">
         <div
           class="expand-header ${open ? "open" : ""}"
@@ -349,7 +351,7 @@ export class DotQuote0Card extends LitElement {
               .value=${this._textSignature}
               @input=${(e: Event) =>
                 (this._textSignature = (e.target as HTMLInputElement).value)}
-              placeholder="e.g. 2025-08-04 20:00"
+              placeholder="e.g. 2026-02-20"
               style="width:100%"
             ></ha-textfield>
             <div class="action-row">
@@ -361,14 +363,6 @@ export class DotQuote0Card extends LitElement {
               >
                 <ha-icon icon="mdi:send"></ha-icon>
                 Send Text
-              </button>
-              <button
-                class="md3-btn tonal"
-                @click=${this._handleNextContent}
-                ?disabled=${this._sending}
-              >
-                <ha-icon icon="mdi:skip-next-outline"></ha-icon>
-                Next Content
               </button>
             </div>
           </div>
@@ -382,7 +376,6 @@ export class DotQuote0Card extends LitElement {
     const open = this._sendImageExpanded;
 
     return html`
-      <div class="divider"></div>
       <div class="expand-section">
         <div
           class="expand-header ${open ? "open" : ""}"
@@ -464,8 +457,13 @@ export class DotQuote0Card extends LitElement {
 
     return html`
       <ha-card>
-        ${this._renderStatus()} ${this._renderPreview()}
-        ${this._renderSendText()} ${this._renderSendImage()}
+        ${this._renderHero()}
+        ${this._renderInfo()}
+        <div class="divider"></div>
+        ${this._renderNextContent()}
+        <div class="divider"></div>
+        ${this._renderSendText()}
+        ${this._renderSendImage()}
         ${this._toast
           ? html`<div class="card-footer">
               <div class="toast ${this._toastType}">${this._toast}</div>
