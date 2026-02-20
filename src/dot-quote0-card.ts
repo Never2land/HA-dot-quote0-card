@@ -1,13 +1,16 @@
 import { LitElement, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { DotQuote0CardConfig, Hass, DOMAIN } from "./types";
+import { DotQuote0CardConfig, Hass, DotDevice, DOMAIN } from "./types";
 import { cardStyles } from "./styles";
+import { discoverDevices, findDevice } from "./helpers";
 import "./editor";
 
 @customElement("dot-quote0-card")
 export class DotQuote0Card extends LitElement {
   @property({ attribute: false }) public hass!: Hass;
   @state() private _config!: DotQuote0CardConfig;
+  @state() private _device: DotDevice | undefined;
+  @state() private _resolved = false;
 
   @state() private _textTitle = "";
   @state() private _textMessage = "";
@@ -25,7 +28,7 @@ export class DotQuote0Card extends LitElement {
 
   static getStubConfig() {
     return {
-      entity: "",
+      device_id: "",
       show_preview: true,
       show_send_text: true,
       show_send_image: true,
@@ -33,10 +36,11 @@ export class DotQuote0Card extends LitElement {
   }
 
   setConfig(config: DotQuote0CardConfig): void {
-    if (!config.entity) {
+    if (!config.device_id) {
       throw new Error("Please select a device");
     }
     this._config = config;
+    this._resolved = false;
   }
 
   getCardSize(): number {
@@ -47,55 +51,47 @@ export class DotQuote0Card extends LitElement {
     return { rows: 8, columns: 12, min_rows: 4, min_columns: 6 };
   }
 
-  // ---- Entity helpers: read directly from hass.states ----
-
-  private _eid(platform: string, suffix: string): string {
-    return `${platform}.${this._config.entity}_${suffix}`;
+  protected async updated(changed: Map<string, unknown>): Promise<void> {
+    if ((changed.has("hass") || changed.has("_config")) && this.hass && this._config?.device_id && !this._resolved) {
+      try {
+        const devices = await discoverDevices(this.hass);
+        this._device = findDevice(devices, this._config.device_id);
+        this._resolved = true;
+      } catch {
+        // Will retry on next hass update
+      }
+    }
   }
 
-  private _state(platform: string, suffix: string): string {
-    const entity = this.hass?.states[this._eid(platform, suffix)];
-    return entity?.state ?? "unavailable";
+  // ---- Entity helpers: use registry-resolved entity_ids ----
+
+  private _eid(suffix: string): string | undefined {
+    return this._device?.entities[suffix];
   }
 
-  private _attr(
-    platform: string,
-    suffix: string,
-    attr: string,
-  ): any {
-    const entity = this.hass?.states[this._eid(platform, suffix)];
-    return entity?.attributes?.[attr];
+  private _stateOf(suffix: string): string {
+    const eid = this._eid(suffix);
+    if (!eid) return "unavailable";
+    return this.hass?.states[eid]?.state ?? "unavailable";
+  }
+
+  private _attrOf(suffix: string, attr: string): any {
+    const eid = this._eid(suffix);
+    if (!eid) return undefined;
+    return this.hass?.states[eid]?.attributes?.[attr];
   }
 
   private _isOnline(): boolean {
-    return this._state("binary_sensor", "online") === "on";
-  }
-
-  private _deviceId(): string {
-    // Extract the raw device serial from the entity prefix
-    // Entity prefix is like "dot_quote0_ABCD1234ABCD"
-    const prefix = this._config.entity;
-    return prefix.startsWith(`${DOMAIN}_`)
-      ? prefix.slice(DOMAIN.length + 1)
-      : prefix;
-  }
-
-  private _deviceName(): string {
-    const eid = this._eid("sensor", "power_state");
-    const entity = this.hass?.states[eid];
-    const friendly = entity?.attributes?.friendly_name;
-    if (friendly) return friendly.replace(" Power State", "");
-    return `Quote/0 ${this._deviceId().slice(-4)}`;
+    return this._stateOf("online") === "on";
   }
 
   private _getPreviewImages(): string[] {
-    const prefix = this._config.entity;
-    for (const key in this.hass?.states) {
-      if (key.startsWith(`sensor.${prefix}`)) {
-        const e = this.hass.states[key];
-        if (e.attributes.current_images) {
-          return e.attributes.current_images;
-        }
+    if (!this._device) return [];
+    for (const suffix of Object.keys(this._device.entities)) {
+      const eid = this._device.entities[suffix];
+      const entity = this.hass?.states[eid];
+      if (entity?.attributes?.current_images) {
+        return entity.attributes.current_images;
       }
     }
     return [];
@@ -115,7 +111,7 @@ export class DotQuote0Card extends LitElement {
     this._sending = true;
     try {
       await this.hass.callService(DOMAIN, "send_text", {
-        device_id: this._deviceId(),
+        device_id: this._config.device_id,
         title: this._textTitle || undefined,
         message: this._textMessage || undefined,
         signature: this._textSignature || undefined,
@@ -134,7 +130,7 @@ export class DotQuote0Card extends LitElement {
     this._sending = true;
     try {
       await this.hass.callService(DOMAIN, "send_image", {
-        device_id: this._deviceId(),
+        device_id: this._config.device_id,
         image: this._imageData,
         dither_type: this._ditherType,
         border: this._border,
@@ -149,9 +145,11 @@ export class DotQuote0Card extends LitElement {
   }
 
   private async _handleNextContent() {
+    const eid = this._eid("next_content");
+    if (!eid) return;
     try {
       await this.hass.callService("button", "press", {
-        entity_id: this._eid("button", "next_content"),
+        entity_id: eid,
       });
       this._showToast("Switched to next content", "success");
     } catch (e: any) {
@@ -175,17 +173,18 @@ export class DotQuote0Card extends LitElement {
 
   private _renderStatus() {
     const online = this._isOnline();
-    const power = this._state("sensor", "power_state");
-    const battery = this._state("sensor", "battery_status");
-    const wifi = this._state("sensor", "wifi_signal");
-    const firmware = this._state("sensor", "firmware_version");
-    const lastRender = this._state("sensor", "last_render");
-    const nextPower = this._state("sensor", "next_render_power");
+    const power = this._stateOf("power_state");
+    const battery = this._stateOf("battery_status");
+    const wifi = this._stateOf("wifi_signal");
+    const firmware = this._stateOf("firmware_version");
+    const lastRender = this._stateOf("last_render");
+    const nextPower = this._stateOf("next_render_power");
+    const name = this._device?.name || `Quote/0 ${this._config.device_id.slice(-4)}`;
 
     return html`
       <div class="card-header">
         <div class="device-info">
-          <span class="device-name">${this._deviceName()}</span>
+          <span class="device-name">${name}</span>
           <span class="device-meta">FW ${firmware}</span>
         </div>
         <span class="online-badge ${online ? "online" : "offline"}">
@@ -350,6 +349,14 @@ export class DotQuote0Card extends LitElement {
   protected render() {
     if (!this._config || !this.hass) {
       return html`<ha-card>Loading...</ha-card>`;
+    }
+
+    if (!this._resolved) {
+      return html`<ha-card><div class="section">Discovering device...</div></ha-card>`;
+    }
+
+    if (!this._device) {
+      return html`<ha-card><div class="section">Device not found. Check the integration.</div></ha-card>`;
     }
 
     return html`

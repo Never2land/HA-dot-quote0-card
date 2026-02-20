@@ -1,40 +1,28 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { DotQuote0CardConfig, Hass, DOMAIN } from "./types";
-
-interface DeviceOption {
-  label: string;
-  prefix: string;
-  entity: string;
-}
+import { DotQuote0CardConfig, Hass, DotDevice } from "./types";
+import { discoverDevices } from "./helpers";
 
 @customElement("dot-quote0-card-editor")
 export class DotQuote0CardEditor extends LitElement {
   @property({ attribute: false }) public hass!: Hass;
   @state() private _config!: DotQuote0CardConfig;
+  @state() private _devices: DotDevice[] = [];
+  @state() private _loading = true;
 
   setConfig(config: DotQuote0CardConfig): void {
     this._config = { ...config };
   }
 
-  private _getDevices(): DeviceOption[] {
-    if (!this.hass) return [];
-    const seen = new Map<string, DeviceOption>();
-
-    for (const eid of Object.keys(this.hass.states)) {
-      if (!eid.startsWith(`sensor.${DOMAIN}_`)) continue;
-      if (!eid.endsWith("_power_state")) continue;
-
-      const prefix = eid.replace("sensor.", "").replace("_power_state", "");
-      if (seen.has(prefix)) continue;
-
-      const entity = this.hass.states[eid];
-      const name =
-        entity.attributes.friendly_name?.replace(" Power State", "") ||
-        prefix;
-      seen.set(prefix, { label: name, prefix, entity: eid });
+  protected async updated(changed: Map<string, unknown>): Promise<void> {
+    if (changed.has("hass") && this.hass) {
+      try {
+        this._devices = await discoverDevices(this.hass);
+      } catch {
+        this._devices = [];
+      }
+      this._loading = false;
     }
-    return Array.from(seen.values());
   }
 
   private _dispatchChange(newConfig: DotQuote0CardConfig): void {
@@ -46,9 +34,9 @@ export class DotQuote0CardEditor extends LitElement {
     this.dispatchEvent(event);
   }
 
-  private _entityChanged(ev: Event): void {
+  private _deviceChanged(ev: Event): void {
     const value = (ev.target as HTMLSelectElement).value;
-    this._dispatchChange({ ...this._config, entity: value });
+    this._dispatchChange({ ...this._config, device_id: value });
   }
 
   private _checkboxChanged(key: string, ev: Event): void {
@@ -59,33 +47,36 @@ export class DotQuote0CardEditor extends LitElement {
   protected render() {
     if (!this._config) return html``;
 
-    const devices = this._getDevices();
-
     return html`
       <div class="editor">
         <div class="field">
           <label>Device</label>
-          <select @change=${this._entityChanged}>
-            <option value="" ?selected=${!this._config.entity}>
-              -- Select a Quote/0 device --
-            </option>
-            ${devices.map(
-              (d) => html`
-                <option
-                  value=${d.prefix}
-                  ?selected=${this._config.entity === d.prefix}
-                >
-                  ${d.label}
-                </option>
-              `,
-            )}
-          </select>
-          ${devices.length === 0
-            ? html`<div class="hint">
-                No Dot. Quote/0 devices found. Make sure the integration is
-                installed and configured.
-              </div>`
-            : ""}
+          ${this._loading
+            ? html`<div class="hint">Loading devices...</div>`
+            : html`
+                <select @change=${this._deviceChanged}>
+                  <option value="" ?selected=${!this._config.device_id}>
+                    -- Select a Quote/0 device --
+                  </option>
+                  ${this._devices.map(
+                    (d) => html`
+                      <option
+                        value=${d.dot_device_id}
+                        ?selected=${this._config.device_id ===
+                        d.dot_device_id}
+                      >
+                        ${d.name}
+                      </option>
+                    `,
+                  )}
+                </select>
+                ${this._devices.length === 0
+                  ? html`<div class="hint">
+                      No Dot. Quote/0 devices found. Make sure the integration
+                      is installed and configured.
+                    </div>`
+                  : ""}
+              `}
         </div>
         <div class="field">
           <label>
@@ -142,7 +133,10 @@ export class DotQuote0CardEditor extends LitElement {
       padding: 8px;
       border: 1px solid var(--divider-color, #e0e0e0);
       border-radius: 4px;
-      background: var(--ha-card-background, var(--card-background-color, #fff));
+      background: var(
+        --ha-card-background,
+        var(--card-background-color, #fff)
+      );
       color: var(--primary-text-color);
       font-size: 0.9em;
     }
