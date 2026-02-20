@@ -1,10 +1,8 @@
-import { LitElement, html, nothing, PropertyValues } from "lit";
+import { LitElement, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { DotQuote0CardConfig, Hass, HassEntity } from "./types";
+import { DotQuote0CardConfig, Hass, DOMAIN } from "./types";
 import { cardStyles } from "./styles";
 import "./editor";
-
-const DOMAIN = "dot_quote0";
 
 @customElement("dot-quote0-card")
 export class DotQuote0Card extends LitElement {
@@ -27,7 +25,7 @@ export class DotQuote0Card extends LitElement {
 
   static getStubConfig() {
     return {
-      device_id: "",
+      entity: "",
       show_preview: true,
       show_send_text: true,
       show_send_image: true,
@@ -35,8 +33,8 @@ export class DotQuote0Card extends LitElement {
   }
 
   setConfig(config: DotQuote0CardConfig): void {
-    if (!config.device_id) {
-      throw new Error("Please set device_id");
+    if (!config.entity) {
+      throw new Error("Please select a device");
     }
     this._config = config;
   }
@@ -49,31 +47,51 @@ export class DotQuote0Card extends LitElement {
     return { rows: 8, columns: 12, min_rows: 4, min_columns: 6 };
   }
 
-  private _entityId(suffix: string): string {
-    return `sensor.${DOMAIN}_${this._config.device_id}_${suffix}`;
+  // ---- Entity helpers: read directly from hass.states ----
+
+  private _eid(platform: string, suffix: string): string {
+    return `${platform}.${this._config.entity}_${suffix}`;
   }
 
-  private _getState(suffix: string): string {
-    const eid = this._entityId(suffix);
-    const entity = this.hass?.states[eid];
+  private _state(platform: string, suffix: string): string {
+    const entity = this.hass?.states[this._eid(platform, suffix)];
     return entity?.state ?? "unavailable";
   }
 
-  private _getOnline(): boolean {
-    const eid = `binary_sensor.${DOMAIN}_${this._config.device_id}_online`;
+  private _attr(
+    platform: string,
+    suffix: string,
+    attr: string,
+  ): any {
+    const entity = this.hass?.states[this._eid(platform, suffix)];
+    return entity?.attributes?.[attr];
+  }
+
+  private _isOnline(): boolean {
+    return this._state("binary_sensor", "online") === "on";
+  }
+
+  private _deviceId(): string {
+    // Extract the raw device serial from the entity prefix
+    // Entity prefix is like "dot_quote0_ABCD1234ABCD"
+    const prefix = this._config.entity;
+    return prefix.startsWith(`${DOMAIN}_`)
+      ? prefix.slice(DOMAIN.length + 1)
+      : prefix;
+  }
+
+  private _deviceName(): string {
+    const eid = this._eid("sensor", "power_state");
     const entity = this.hass?.states[eid];
-    return entity?.state === "on";
+    const friendly = entity?.attributes?.friendly_name;
+    if (friendly) return friendly.replace(" Power State", "");
+    return `Quote/0 ${this._deviceId().slice(-4)}`;
   }
 
   private _getPreviewImages(): string[] {
-    // Try to get images from the last render sensor attributes
-    const eid = this._entityId("last_render");
-    const entity = this.hass?.states[eid];
-    // The coordinator stores current_images but they're not exposed as attributes by default
-    // We'll check if there's an image attribute on any sensor
-    // Fallback: check all entity attributes for 'current_images'
+    const prefix = this._config.entity;
     for (const key in this.hass?.states) {
-      if (key.startsWith(`sensor.${DOMAIN}_${this._config.device_id}`)) {
+      if (key.startsWith(`sensor.${prefix}`)) {
         const e = this.hass.states[key];
         if (e.attributes.current_images) {
           return e.attributes.current_images;
@@ -82,6 +100,8 @@ export class DotQuote0Card extends LitElement {
     }
     return [];
   }
+
+  // ---- Actions ----
 
   private async _showToast(msg: string, type: "success" | "error") {
     this._toast = msg;
@@ -95,7 +115,7 @@ export class DotQuote0Card extends LitElement {
     this._sending = true;
     try {
       await this.hass.callService(DOMAIN, "send_text", {
-        device_id: this._config.device_id,
+        device_id: this._deviceId(),
         title: this._textTitle || undefined,
         message: this._textMessage || undefined,
         signature: this._textSignature || undefined,
@@ -114,7 +134,7 @@ export class DotQuote0Card extends LitElement {
     this._sending = true;
     try {
       await this.hass.callService(DOMAIN, "send_image", {
-        device_id: this._config.device_id,
+        device_id: this._deviceId(),
         image: this._imageData,
         dither_type: this._ditherType,
         border: this._border,
@@ -129,10 +149,9 @@ export class DotQuote0Card extends LitElement {
   }
 
   private async _handleNextContent() {
-    const eid = `button.${DOMAIN}_${this._config.device_id}_next_content`;
     try {
       await this.hass.callService("button", "press", {
-        entity_id: eid,
+        entity_id: this._eid("button", "next_content"),
       });
       this._showToast("Switched to next content", "success");
     } catch (e: any) {
@@ -152,19 +171,21 @@ export class DotQuote0Card extends LitElement {
     reader.readAsDataURL(file);
   }
 
+  // ---- Render ----
+
   private _renderStatus() {
-    const online = this._getOnline();
-    const power = this._getState("power_state");
-    const battery = this._getState("battery_status");
-    const wifi = this._getState("wifi_signal");
-    const firmware = this._getState("firmware_version");
-    const lastRender = this._getState("last_render");
-    const nextPower = this._getState("next_render_power");
+    const online = this._isOnline();
+    const power = this._state("sensor", "power_state");
+    const battery = this._state("sensor", "battery_status");
+    const wifi = this._state("sensor", "wifi_signal");
+    const firmware = this._state("sensor", "firmware_version");
+    const lastRender = this._state("sensor", "last_render");
+    const nextPower = this._state("sensor", "next_render_power");
 
     return html`
       <div class="card-header">
         <div class="device-info">
-          <span class="device-name">Quote/0 ${this._config.device_id.slice(-4)}</span>
+          <span class="device-name">${this._deviceName()}</span>
           <span class="device-meta">FW ${firmware}</span>
         </div>
         <span class="online-badge ${online ? "online" : "offline"}">
@@ -184,7 +205,7 @@ export class DotQuote0Card extends LitElement {
           </div>
           <div class="status-item">
             <span class="status-label">Wi-Fi</span>
-            <span class="status-value">${wifi} dBm</span>
+            <span class="status-value">${wifi !== "unavailable" ? wifi + " dBm" : wifi}</span>
           </div>
           <div class="status-item">
             <span class="status-label">Last render</span>
@@ -283,7 +304,7 @@ export class DotQuote0Card extends LitElement {
       <div class="section">
         <div class="section-title">Send Image</div>
         <div class="input-group">
-          <label>Image (296×152 PNG)</label>
+          <label>Image (296x152 PNG)</label>
           <input type="file" accept="image/png" @change=${this._handleFileSelect} />
         </div>
         <div class="input-row">
@@ -305,7 +326,7 @@ export class DotQuote0Card extends LitElement {
               .value=${String(this._border)}
               @change=${(e: Event) =>
                 (this._border = parseInt(
-                  (e.target as HTMLSelectElement).value
+                  (e.target as HTMLSelectElement).value,
                 ))}
             >
               <option value="0">White</option>
