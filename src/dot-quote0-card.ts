@@ -21,6 +21,9 @@ export class DotQuote0Card extends LitElement {
   @state() private _toastType: "success" | "error" = "success";
   @state() private _sending = false;
 
+  @state() private _sendTextExpanded = false;
+  @state() private _sendImageExpanded = false;
+
   private _hass!: Hass;
 
   set hass(hass: Hass) {
@@ -202,7 +205,8 @@ export class DotQuote0Card extends LitElement {
           <span class="device-name">${name}</span>
           <span class="device-meta">FW ${firmware}</span>
         </div>
-        <span class="online-badge ${online ? "online" : "offline"}">
+        <span class="status-chip ${online ? "online" : "offline"}">
+          <span class="status-chip-dot"></span>
           ${online ? "Online" : "Offline"}
         </span>
       </div>
@@ -241,13 +245,40 @@ export class DotQuote0Card extends LitElement {
     const src = images.length > 0 ? images[0] : null;
 
     return html`
-      <hr class="divider" />
+      <div class="divider"></div>
       <div class="preview-section">
         <div class="section-title">Display Preview</div>
         <div class="preview-frame">
           ${src
             ? html`<img src="${src}" alt="Current display" />`
-            : html`<div class="preview-placeholder">No preview available</div>`}
+            : html`
+                <svg class="preview-fallback" viewBox="0 0 296 152" xmlns="http://www.w3.org/2000/svg" aria-label="No preview available">
+                  <defs>
+                    <pattern id="dotgrid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                      <circle cx="1" cy="1" r="0.7" fill="currentColor" opacity="0.15"/>
+                    </pattern>
+                  </defs>
+                  <rect width="296" height="152" fill="url(#dotgrid)"/>
+                  <!-- Monitor frame -->
+                  <rect x="108" y="44" width="80" height="52" rx="5" ry="5"
+                    fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
+                  <!-- Screen area -->
+                  <rect x="113" y="49" width="70" height="38" rx="2" ry="2"
+                    fill="currentColor" opacity="0.08"/>
+                  <!-- Horizontal lines inside screen (text lines) -->
+                  <line x1="120" y1="60" x2="176" y2="60" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                  <line x1="120" y1="68" x2="166" y2="68" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                  <line x1="120" y1="76" x2="172" y2="76" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                  <!-- Stand -->
+                  <line x1="138" y1="96" x2="158" y2="96" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
+                  <line x1="148" y1="96" x2="148" y2="106" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
+                  <line x1="140" y1="106" x2="156" y2="106" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
+                  <!-- Label -->
+                  <text x="148" y="126" text-anchor="middle"
+                    font-size="9" font-family="Roboto, sans-serif" letter-spacing="0.5"
+                    fill="currentColor" opacity="0.4">NO PREVIEW AVAILABLE</text>
+                </svg>
+              `}
         </div>
       </div>
     `;
@@ -257,54 +288,61 @@ export class DotQuote0Card extends LitElement {
     if (this._config.show_send_text === false) return nothing;
 
     return html`
-      <hr class="divider" />
-      <div class="section">
-        <div class="section-title">Send Text</div>
-        <div class="input-group">
-          <label>Title</label>
-          <input
-            type="text"
-            .value=${this._textTitle}
-            @input=${(e: Event) =>
-              (this._textTitle = (e.target as HTMLInputElement).value)}
-            placeholder="Enter title"
-          />
+      <div class="divider"></div>
+      <div class="expand-section">
+        <div
+          class="expand-header"
+          @click=${() => (this._sendTextExpanded = !this._sendTextExpanded)}
+          role="button"
+          aria-expanded=${this._sendTextExpanded}
+        >
+          <span class="section-title">Send Text</span>
+          <ha-icon
+            class="expand-chevron ${this._sendTextExpanded ? "open" : ""}"
+            icon="mdi:chevron-down"
+          ></ha-icon>
         </div>
-        <div class="input-group">
-          <label>Message</label>
-          <textarea
-            .value=${this._textMessage}
-            @input=${(e: Event) =>
-              (this._textMessage = (e.target as HTMLTextAreaElement).value)}
-            placeholder="Enter message (use \\n for line breaks)"
-          ></textarea>
-        </div>
-        <div class="input-group">
-          <label>Signature</label>
-          <input
-            type="text"
-            .value=${this._textSignature}
-            @input=${(e: Event) =>
-              (this._textSignature = (e.target as HTMLInputElement).value)}
-            placeholder="e.g. 2025-08-04 20:00"
-          />
-        </div>
-        <div class="button-row">
-          <button
-            class="btn btn-send"
-            @click=${this._handleSendText}
-            ?disabled=${this._sending ||
-            (!this._textTitle && !this._textMessage)}
-          >
-            Send Text
-          </button>
-          <button
-            class="btn btn-secondary"
-            @click=${this._handleNextContent}
-            ?disabled=${this._sending}
-          >
-            Next Content
-          </button>
+        <div class="expand-content ${this._sendTextExpanded ? "open" : ""}">
+          <div class="expand-body">
+            <ha-textfield
+              label="Title"
+              .value=${this._textTitle}
+              @input=${(e: Event) =>
+                (this._textTitle = (e.target as HTMLInputElement).value)}
+              style="width:100%"
+            ></ha-textfield>
+            <ha-textfield
+              label="Message"
+              .value=${this._textMessage}
+              @input=${(e: Event) =>
+                (this._textMessage = (e.target as HTMLInputElement).value)}
+              helper="Use \\n for line breaks"
+              style="width:100%"
+            ></ha-textfield>
+            <ha-textfield
+              label="Signature"
+              .value=${this._textSignature}
+              @input=${(e: Event) =>
+                (this._textSignature = (e.target as HTMLInputElement).value)}
+              placeholder="e.g. 2025-08-04 20:00"
+              style="width:100%"
+            ></ha-textfield>
+            <div class="md-button-row">
+              <mwc-button
+                raised
+                label="Send Text"
+                @click=${this._handleSendText}
+                ?disabled=${this._sending ||
+                (!this._textTitle && !this._textMessage)}
+              ></mwc-button>
+              <mwc-button
+                outlined
+                label="Next Content"
+                @click=${this._handleNextContent}
+                ?disabled=${this._sending}
+              ></mwc-button>
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -314,48 +352,75 @@ export class DotQuote0Card extends LitElement {
     if (this._config.show_send_image === false) return nothing;
 
     return html`
-      <hr class="divider" />
-      <div class="section">
-        <div class="section-title">Send Image</div>
-        <div class="input-group">
-          <label>Image (296x152 PNG)</label>
-          <input type="file" accept="image/png" @change=${this._handleFileSelect} />
+      <div class="divider"></div>
+      <div class="expand-section">
+        <div
+          class="expand-header"
+          @click=${() => (this._sendImageExpanded = !this._sendImageExpanded)}
+          role="button"
+          aria-expanded=${this._sendImageExpanded}
+        >
+          <span class="section-title">Send Image</span>
+          <ha-icon
+            class="expand-chevron ${this._sendImageExpanded ? "open" : ""}"
+            icon="mdi:chevron-down"
+          ></ha-icon>
         </div>
-        <div class="input-row">
-          <div class="input-group">
-            <label>Dither</label>
-            <select
-              .value=${this._ditherType}
-              @change=${(e: Event) =>
-                (this._ditherType = (e.target as HTMLSelectElement).value)}
-            >
-              <option value="DIFFUSION">Diffusion</option>
-              <option value="ORDERED">Ordered</option>
-              <option value="NONE">None</option>
-            </select>
+        <div class="expand-content ${this._sendImageExpanded ? "open" : ""}">
+          <div class="expand-body">
+            <div class="file-input-group">
+              <span class="file-input-label">Image (296×152 PNG)</span>
+              <label class="file-input-btn">
+                <ha-icon icon="mdi:image-plus"></ha-icon>
+                <span>${this._imageData ? "Image selected" : "Choose file…"}</span>
+                <input
+                  type="file"
+                  accept="image/png"
+                  @change=${this._handleFileSelect}
+                />
+              </label>
+            </div>
+            <div class="md-row">
+              <ha-select
+                label="Dither"
+                .value=${this._ditherType}
+                @selected=${(e: Event) => {
+                  const el = e.target as any;
+                  if (el.value) this._ditherType = el.value;
+                }}
+                @closed=${(e: Event) => e.stopPropagation()}
+                fixedMenuPosition
+                naturalMenuWidth
+              >
+                <ha-list-item value="DIFFUSION">Diffusion</ha-list-item>
+                <ha-list-item value="ORDERED">Ordered</ha-list-item>
+                <ha-list-item value="NONE">None</ha-list-item>
+              </ha-select>
+              <ha-select
+                label="Border"
+                .value=${String(this._border)}
+                @selected=${(e: Event) => {
+                  const el = e.target as any;
+                  if (el.value !== undefined)
+                    this._border = parseInt(el.value);
+                }}
+                @closed=${(e: Event) => e.stopPropagation()}
+                fixedMenuPosition
+                naturalMenuWidth
+              >
+                <ha-list-item value="0">White</ha-list-item>
+                <ha-list-item value="1">Black</ha-list-item>
+              </ha-select>
+            </div>
+            <div class="md-button-row">
+              <mwc-button
+                raised
+                label="Send Image"
+                @click=${this._handleSendImage}
+                ?disabled=${this._sending || !this._imageData}
+              ></mwc-button>
+            </div>
           </div>
-          <div class="input-group">
-            <label>Border</label>
-            <select
-              .value=${String(this._border)}
-              @change=${(e: Event) =>
-                (this._border = parseInt(
-                  (e.target as HTMLSelectElement).value,
-                ))}
-            >
-              <option value="0">White</option>
-              <option value="1">Black</option>
-            </select>
-          </div>
-        </div>
-        <div class="button-row">
-          <button
-            class="btn btn-send"
-            @click=${this._handleSendImage}
-            ?disabled=${this._sending || !this._imageData}
-          >
-            Send Image
-          </button>
         </div>
       </div>
     `;
