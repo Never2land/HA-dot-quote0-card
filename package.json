@@ -1,0 +1,23 @@
+{
+  "name": "dot-quote0-card",
+  "version": "1.0.0",
+  "description": "Custom Lovelace card for Dot. Quote/0 e-ink devices",
+  "type": "module",
+  "main": "dist/dot-quote0-card.js",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "lit": "^3.1.0",
+    "rollup": "^4.9.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "lit": "^3.1.0"
+  }
+}
