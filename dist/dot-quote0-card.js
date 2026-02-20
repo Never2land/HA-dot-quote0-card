@@ -1,32 +1,32 @@
-function t(t,e,s,i){var n,o=arguments.length,r=o<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,i);else for(var a=t.length-1;a>=0;a--)(n=t[a])&&(r=(o<3?n(r):o>3?n(e,s,r):n(e,s))||r);return o>3&&r&&Object.defineProperty(e,s,r),r}"function"==typeof SuppressedError&&SuppressedError;
+function e(e,t,i,s){var r,n=arguments.length,o=n<3?t:null===s?s=Object.getOwnPropertyDescriptor(t,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,i,s);else for(var a=e.length-1;a>=0;a--)(r=e[a])&&(o=(n<3?r(o):n>3?r(t,i,o):r(t,i))||o);return n>3&&o&&Object.defineProperty(t,i,o),o}"function"==typeof SuppressedError&&SuppressedError;
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const e=globalThis,s=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,i=Symbol(),n=new WeakMap;let o=class{constructor(t,e,s){if(this._$cssResult$=!0,s!==i)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(s&&void 0===t){const s=void 0!==e&&1===e.length;s&&(t=n.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),s&&n.set(e,t))}return t}toString(){return this.cssText}};const r=(t,...e)=>{const s=1===t.length?t[0]:e.reduce((e,s,i)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[i+1],t[0]);return new o(s,t,i)},a=s?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return(t=>new o("string"==typeof t?t:t+"",void 0,i))(e)})(t):t,{is:d,defineProperty:c,getOwnPropertyDescriptor:l,getOwnPropertyNames:h,getOwnPropertySymbols:p,getPrototypeOf:u}=Object,_=globalThis,v=_.trustedTypes,g=v?v.emptyScript:"",f=_.reactiveElementPolyfillSupport,m=(t,e)=>t,x={toAttribute(t,e){switch(e){case Boolean:t=t?g:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let s=t;switch(e){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t)}catch(t){s=null}}return s}},y=(t,e)=>!d(t,e),$={attribute:!0,type:String,converter:x,reflect:!1,useDefault:!1,hasChanged:y};
+const t=globalThis,i=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s=Symbol(),r=new WeakMap;let n=class{constructor(e,t,i){if(this._$cssResult$=!0,i!==s)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=t}get styleSheet(){let e=this.o;const t=this.t;if(i&&void 0===e){const i=void 0!==t&&1===t.length;i&&(e=r.get(t)),void 0===e&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),i&&r.set(t,e))}return e}toString(){return this.cssText}};const o=(e,...t)=>{const i=1===e.length?e[0]:t.reduce((t,i,s)=>t+(e=>{if(!0===e._$cssResult$)return e.cssText;if("number"==typeof e)return e;throw Error("Value passed to 'css' function must be a 'css' function result: "+e+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+e[s+1],e[0]);return new n(i,e,s)},a=i?e=>e:e=>e instanceof CSSStyleSheet?(e=>{let t="";for(const i of e.cssRules)t+=i.cssText;return(e=>new n("string"==typeof e?e:e+"",void 0,s))(t)})(e):e,{is:d,defineProperty:c,getOwnPropertyDescriptor:l,getOwnPropertyNames:h,getOwnPropertySymbols:p,getPrototypeOf:u}=Object,v=globalThis,m=v.trustedTypes,f=m?m.emptyScript:"",g=v.reactiveElementPolyfillSupport,_=(e,t)=>e,x={toAttribute(e,t){switch(t){case Boolean:e=e?f:null;break;case Object:case Array:e=null==e?e:JSON.stringify(e)}return e},fromAttribute(e,t){let i=e;switch(t){case Boolean:i=null!==e;break;case Number:i=null===e?null:Number(e);break;case Object:case Array:try{i=JSON.parse(e)}catch(e){i=null}}return i}},b=(e,t)=>!d(e,t),y={attribute:!0,type:String,converter:x,reflect:!1,useDefault:!1,hasChanged:b};
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */Symbol.metadata??=Symbol("metadata"),_.litPropertyMetadata??=new WeakMap;let b=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=$){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const s=Symbol(),i=this.getPropertyDescriptor(t,s,e);void 0!==i&&c(this.prototype,t,i)}}static getPropertyDescriptor(t,e,s){const{get:i,set:n}=l(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:i,set(e){const o=i?.call(this);n?.call(this,e),this.requestUpdate(t,o,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??$}static _$Ei(){if(this.hasOwnProperty(m("elementProperties")))return;const t=u(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(m("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(m("properties"))){const t=this.properties,e=[...h(t),...p(t)];for(const s of e)this.createProperty(s,t[s])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,s]of e)this.elementProperties.set(t,s)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const s=this._$Eu(t,e);void 0!==s&&this._$Eh.set(s,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const s=new Set(t.flat(1/0).reverse());for(const t of s)e.unshift(a(t))}else void 0!==t&&e.push(a(t));return e}static _$Eu(t,e){const s=e.attribute;return!1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const s of e.keys())this.hasOwnProperty(s)&&(t.set(s,this[s]),delete this[s]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,i)=>{if(s)t.adoptedStyleSheets=i.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const s of i){const i=document.createElement("style"),n=e.litNonce;void 0!==n&&i.setAttribute("nonce",n),i.textContent=s.cssText,t.appendChild(i)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,s){this._$AK(t,s)}_$ET(t,e){const s=this.constructor.elementProperties.get(t),i=this.constructor._$Eu(t,s);if(void 0!==i&&!0===s.reflect){const n=(void 0!==s.converter?.toAttribute?s.converter:x).toAttribute(e,s.type);this._$Em=t,null==n?this.removeAttribute(i):this.setAttribute(i,n),this._$Em=null}}_$AK(t,e){const s=this.constructor,i=s._$Eh.get(t);if(void 0!==i&&this._$Em!==i){const t=s.getPropertyOptions(i),n="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:x;this._$Em=i;const o=n.fromAttribute(e,t.type);this[i]=o??this._$Ej?.get(i)??o,this._$Em=null}}requestUpdate(t,e,s,i=!1,n){if(void 0!==t){const o=this.constructor;if(!1===i&&(n=this[t]),s??=o.getPropertyOptions(t),!((s.hasChanged??y)(n,e)||s.useDefault&&s.reflect&&n===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,s))))return;this.C(t,e,s)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:s,reflect:i,wrapped:n},o){s&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==n||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||s||(e=void 0),this._$AL.set(t,e)),!0===i&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,s]of t){const{wrapped:t}=s,i=this[e];!0!==t||this._$AL.has(e)||void 0===i||this.C(e,void 0,s,i)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};b.elementStyles=[],b.shadowRootOptions={mode:"open"},b[m("elementProperties")]=new Map,b[m("finalized")]=new Map,f?.({ReactiveElement:b}),(_.reactiveElementVersions??=[]).push("2.1.2");
-/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */
-const w=globalThis,A=t=>t,S=w.trustedTypes,E=S?S.createPolicy("lit-html",{createHTML:t=>t}):void 0,C="$lit$",k=`lit$${Math.random().toFixed(9).slice(2)}$`,T="?"+k,P=`<${T}>`,O=document,M=()=>O.createComment(""),U=t=>null===t||"object"!=typeof t&&"function"!=typeof t,D=Array.isArray,N="[ \t\n\f\r]",I=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,R=/-->/g,H=/>/g,z=RegExp(`>|${N}(?:([^\\s"'>=/]+)(${N}*=${N}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),j=/'/g,L=/"/g,B=/^(?:script|style|textarea|title)$/i,q=(t=>(e,...s)=>({_$litType$:t,strings:e,values:s}))(1),F=Symbol.for("lit-noChange"),W=Symbol.for("lit-nothing"),V=new WeakMap,Q=O.createTreeWalker(O,129);function G(t,e){if(!D(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==E?E.createHTML(e):e}const J=(t,e)=>{const s=t.length-1,i=[];let n,o=2===e?"<svg>":3===e?"<math>":"",r=I;for(let e=0;e<s;e++){const s=t[e];let a,d,c=-1,l=0;for(;l<s.length&&(r.lastIndex=l,d=r.exec(s),null!==d);)l=r.lastIndex,r===I?"!--"===d[1]?r=R:void 0!==d[1]?r=H:void 0!==d[2]?(B.test(d[2])&&(n=RegExp("</"+d[2],"g")),r=z):void 0!==d[3]&&(r=z):r===z?">"===d[0]?(r=n??I,c=-1):void 0===d[1]?c=-2:(c=r.lastIndex-d[2].length,a=d[1],r=void 0===d[3]?z:'"'===d[3]?L:j):r===L||r===j?r=z:r===R||r===H?r=I:(r=z,n=void 0);const h=r===z&&t[e+1].startsWith("/>")?" ":"";o+=r===I?s+P:c>=0?(i.push(a),s.slice(0,c)+C+s.slice(c)+k+h):s+k+(-2===c?e:h)}return[G(t,o+(t[s]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),i]};class K{constructor({strings:t,_$litType$:e},s){let i;this.parts=[];let n=0,o=0;const r=t.length-1,a=this.parts,[d,c]=J(t,e);if(this.el=K.createElement(d,s),Q.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(i=Q.nextNode())&&a.length<r;){if(1===i.nodeType){if(i.hasAttributes())for(const t of i.getAttributeNames())if(t.endsWith(C)){const e=c[o++],s=i.getAttribute(t).split(k),r=/([.?@])?(.*)/.exec(e);a.push({type:1,index:n,name:r[2],strings:s,ctor:"."===r[1]?et:"?"===r[1]?st:"@"===r[1]?it:tt}),i.removeAttribute(t)}else t.startsWith(k)&&(a.push({type:6,index:n}),i.removeAttribute(t));if(B.test(i.tagName)){const t=i.textContent.split(k),e=t.length-1;if(e>0){i.textContent=S?S.emptyScript:"";for(let s=0;s<e;s++)i.append(t[s],M()),Q.nextNode(),a.push({type:2,index:++n});i.append(t[e],M())}}}else if(8===i.nodeType)if(i.data===T)a.push({type:2,index:n});else{let t=-1;for(;-1!==(t=i.data.indexOf(k,t+1));)a.push({type:7,index:n}),t+=k.length-1}n++}}static createElement(t,e){const s=O.createElement("template");return s.innerHTML=t,s}}function Z(t,e,s=t,i){if(e===F)return e;let n=void 0!==i?s._$Co?.[i]:s._$Cl;const o=U(e)?void 0:e._$litDirective$;return n?.constructor!==o&&(n?._$AO?.(!1),void 0===o?n=void 0:(n=new o(t),n._$AT(t,s,i)),void 0!==i?(s._$Co??=[])[i]=n:s._$Cl=n),void 0!==n&&(e=Z(t,n._$AS(t,e.values),n,i)),e}class X{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:s}=this._$AD,i=(t?.creationScope??O).importNode(e,!0);Q.currentNode=i;let n=Q.nextNode(),o=0,r=0,a=s[0];for(;void 0!==a;){if(o===a.index){let e;2===a.type?e=new Y(n,n.nextSibling,this,t):1===a.type?e=new a.ctor(n,a.name,a.strings,this,t):6===a.type&&(e=new nt(n,this,t)),this._$AV.push(e),a=s[++r]}o!==a?.index&&(n=Q.nextNode(),o++)}return Q.currentNode=O,i}p(t){let e=0;for(const s of this._$AV)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,e),e+=s.strings.length-2):s._$AI(t[e])),e++}}class Y{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,s,i){this.type=2,this._$AH=W,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=s,this.options=i,this._$Cv=i?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Z(this,t,e),U(t)?t===W||null==t||""===t?(this._$AH!==W&&this._$AR(),this._$AH=W):t!==this._$AH&&t!==F&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>D(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==W&&U(this._$AH)?this._$AA.nextSibling.data=t:this.T(O.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:s}=t,i="number"==typeof s?this._$AC(t):(void 0===s.el&&(s.el=K.createElement(G(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===i)this._$AH.p(e);else{const t=new X(i,this),s=t.u(this.options);t.p(e),this.T(s),this._$AH=t}}_$AC(t){let e=V.get(t.strings);return void 0===e&&V.set(t.strings,e=new K(t)),e}k(t){D(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let s,i=0;for(const n of t)i===e.length?e.push(s=new Y(this.O(M()),this.O(M()),this,this.options)):s=e[i],s._$AI(n),i++;i<e.length&&(this._$AR(s&&s._$AB.nextSibling,i),e.length=i)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=A(t).nextSibling;A(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class tt{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,s,i,n){this.type=1,this._$AH=W,this._$AN=void 0,this.element=t,this.name=e,this._$AM=i,this.options=n,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=W}_$AI(t,e=this,s,i){const n=this.strings;let o=!1;if(void 0===n)t=Z(this,t,e,0),o=!U(t)||t!==this._$AH&&t!==F,o&&(this._$AH=t);else{const i=t;let r,a;for(t=n[0],r=0;r<n.length-1;r++)a=Z(this,i[s+r],e,r),a===F&&(a=this._$AH[r]),o||=!U(a)||a!==this._$AH[r],a===W?t=W:t!==W&&(t+=(a??"")+n[r+1]),this._$AH[r]=a}o&&!i&&this.j(t)}j(t){t===W?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class et extends tt{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===W?void 0:t}}class st extends tt{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==W)}}class it extends tt{constructor(t,e,s,i,n){super(t,e,s,i,n),this.type=5}_$AI(t,e=this){if((t=Z(this,t,e,0)??W)===F)return;const s=this._$AH,i=t===W&&s!==W||t.capture!==s.capture||t.once!==s.once||t.passive!==s.passive,n=t!==W&&(s===W||i);i&&this.element.removeEventListener(this.name,this,s),n&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class nt{constructor(t,e,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(t){Z(this,t)}}const ot=w.litHtmlPolyfillSupport;ot?.(K,Y),(w.litHtmlVersions??=[]).push("3.3.2");const rt=globalThis;
-/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */class at extends b{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,s)=>{const i=s?.renderBefore??e;let n=i._$litPart$;if(void 0===n){const t=s?.renderBefore??null;i._$litPart$=n=new Y(e.insertBefore(M(),t),t,void 0,s??{})}return n._$AI(t),n})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return F}}at._$litElement$=!0,at.finalized=!0,rt.litElementHydrateSupport?.({LitElement:at});const dt=rt.litElementPolyfillSupport;dt?.({LitElement:at}),(rt.litElementVersions??=[]).push("4.2.2");
+ */Symbol.metadata??=Symbol("metadata"),v.litPropertyMetadata??=new WeakMap;let $=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,t=y){if(t.state&&(t.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((t=Object.create(t)).wrapped=!0),this.elementProperties.set(e,t),!t.noAccessor){const i=Symbol(),s=this.getPropertyDescriptor(e,i,t);void 0!==s&&c(this.prototype,e,s)}}static getPropertyDescriptor(e,t,i){const{get:s,set:r}=l(this.prototype,e)??{get(){return this[t]},set(e){this[t]=e}};return{get:s,set(t){const n=s?.call(this);r?.call(this,t),this.requestUpdate(e,n,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??y}static _$Ei(){if(this.hasOwnProperty(_("elementProperties")))return;const e=u(this);e.finalize(),void 0!==e.l&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(_("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(_("properties"))){const e=this.properties,t=[...h(e),...p(e)];for(const i of t)this.createProperty(i,e[i])}const e=this[Symbol.metadata];if(null!==e){const t=litPropertyMetadata.get(e);if(void 0!==t)for(const[e,i]of t)this.elementProperties.set(e,i)}this._$Eh=new Map;for(const[e,t]of this.elementProperties){const i=this._$Eu(e,t);void 0!==i&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const t=[];if(Array.isArray(e)){const i=new Set(e.flat(1/0).reverse());for(const e of i)t.unshift(a(e))}else void 0!==e&&t.push(a(e));return t}static _$Eu(e,t){const i=t.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof e?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),void 0!==this.renderRoot&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,t=this.constructor.elementProperties;for(const i of t.keys())this.hasOwnProperty(i)&&(e.set(i,this[i]),delete this[i]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((e,s)=>{if(i)e.adoptedStyleSheets=s.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const i of s){const s=document.createElement("style"),r=t.litNonce;void 0!==r&&s.setAttribute("nonce",r),s.textContent=i.cssText,e.appendChild(s)}})(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,t,i){this._$AK(e,i)}_$ET(e,t){const i=this.constructor.elementProperties.get(e),s=this.constructor._$Eu(e,i);if(void 0!==s&&!0===i.reflect){const r=(void 0!==i.converter?.toAttribute?i.converter:x).toAttribute(t,i.type);this._$Em=e,null==r?this.removeAttribute(s):this.setAttribute(s,r),this._$Em=null}}_$AK(e,t){const i=this.constructor,s=i._$Eh.get(e);if(void 0!==s&&this._$Em!==s){const e=i.getPropertyOptions(s),r="function"==typeof e.converter?{fromAttribute:e.converter}:void 0!==e.converter?.fromAttribute?e.converter:x;this._$Em=s;const n=r.fromAttribute(t,e.type);this[s]=n??this._$Ej?.get(s)??n,this._$Em=null}}requestUpdate(e,t,i,s=!1,r){if(void 0!==e){const n=this.constructor;if(!1===s&&(r=this[e]),i??=n.getPropertyOptions(e),!((i.hasChanged??b)(r,t)||i.useDefault&&i.reflect&&r===this._$Ej?.get(e)&&!this.hasAttribute(n._$Eu(e,i))))return;this.C(e,t,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(e,t,{useDefault:i,reflect:s,wrapped:r},n){i&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,n??t??this[e]),!0!==r||void 0!==n)||(this._$AL.has(e)||(this.hasUpdated||i||(t=void 0),this._$AL.set(e,t)),!0===s&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const e=this.scheduleUpdate();return null!=e&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[e,t]of this._$Ep)this[e]=t;this._$Ep=void 0}const e=this.constructor.elementProperties;if(e.size>0)for(const[t,i]of e){const{wrapped:e}=i,s=this[t];!0!==e||this._$AL.has(t)||void 0===s||this.C(t,void 0,i,s)}}let e=!1;const t=this._$AL;try{e=this.shouldUpdate(t),e?(this.willUpdate(t),this._$EO?.forEach(e=>e.hostUpdate?.()),this.update(t)):this._$EM()}catch(t){throw e=!1,this._$EM(),t}e&&this._$AE(t)}willUpdate(e){}_$AE(e){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(e=>this._$ET(e,this[e])),this._$EM()}updated(e){}firstUpdated(e){}};$.elementStyles=[],$.shadowRootOptions={mode:"open"},$[_("elementProperties")]=new Map,$[_("finalized")]=new Map,g?.({ReactiveElement:$}),(v.reactiveElementVersions??=[]).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ct=t=>(e,s)=>{void 0!==s?s.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},lt={attribute:!0,type:String,converter:x,reflect:!1,hasChanged:y},ht=(t=lt,e,s)=>{const{kind:i,metadata:n}=s;let o=globalThis.litPropertyMetadata.get(n);if(void 0===o&&globalThis.litPropertyMetadata.set(n,o=new Map),"setter"===i&&((t=Object.create(t)).wrapped=!0),o.set(s.name,t),"accessor"===i){const{name:i}=s;return{set(s){const n=e.get.call(this);e.set.call(this,s),this.requestUpdate(i,n,t,!0,s)},init(e){return void 0!==e&&this.C(i,void 0,t,e),e}}}if("setter"===i){const{name:i}=s;return function(s){const n=this[i];e.call(this,s),this.requestUpdate(i,n,t,!0,s)}}throw Error("Unsupported decorator location: "+i)};
+const w=globalThis,A=e=>e,S=w.trustedTypes,E=S?S.createPolicy("lit-html",{createHTML:e=>e}):void 0,k="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,T="?"+C,P=`<${T}>`,O=document,M=()=>O.createComment(""),U=e=>null===e||"object"!=typeof e&&"function"!=typeof e,D=Array.isArray,N="[ \t\n\f\r]",z=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,I=/-->/g,R=/>/g,H=RegExp(`>|${N}(?:([^\\s"'>=/]+)(${N}*=${N}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),j=/'/g,L=/"/g,B=/^(?:script|style|textarea|title)$/i,q=(e=>(t,...i)=>({_$litType$:e,strings:t,values:i}))(1),F=Symbol.for("lit-noChange"),W=Symbol.for("lit-nothing"),V=new WeakMap,Q=O.createTreeWalker(O,129);function G(e,t){if(!D(e)||!e.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==E?E.createHTML(t):t}const J=(e,t)=>{const i=e.length-1,s=[];let r,n=2===t?"<svg>":3===t?"<math>":"",o=z;for(let t=0;t<i;t++){const i=e[t];let a,d,c=-1,l=0;for(;l<i.length&&(o.lastIndex=l,d=o.exec(i),null!==d);)l=o.lastIndex,o===z?"!--"===d[1]?o=I:void 0!==d[1]?o=R:void 0!==d[2]?(B.test(d[2])&&(r=RegExp("</"+d[2],"g")),o=H):void 0!==d[3]&&(o=H):o===H?">"===d[0]?(o=r??z,c=-1):void 0===d[1]?c=-2:(c=o.lastIndex-d[2].length,a=d[1],o=void 0===d[3]?H:'"'===d[3]?L:j):o===L||o===j?o=H:o===I||o===R?o=z:(o=H,r=void 0);const h=o===H&&e[t+1].startsWith("/>")?" ":"";n+=o===z?i+P:c>=0?(s.push(a),i.slice(0,c)+k+i.slice(c)+C+h):i+C+(-2===c?t:h)}return[G(e,n+(e[i]||"<?>")+(2===t?"</svg>":3===t?"</math>":"")),s]};class K{constructor({strings:e,_$litType$:t},i){let s;this.parts=[];let r=0,n=0;const o=e.length-1,a=this.parts,[d,c]=J(e,t);if(this.el=K.createElement(d,i),Q.currentNode=this.el.content,2===t||3===t){const e=this.el.content.firstChild;e.replaceWith(...e.childNodes)}for(;null!==(s=Q.nextNode())&&a.length<o;){if(1===s.nodeType){if(s.hasAttributes())for(const e of s.getAttributeNames())if(e.endsWith(k)){const t=c[n++],i=s.getAttribute(e).split(C),o=/([.?@])?(.*)/.exec(t);a.push({type:1,index:r,name:o[2],strings:i,ctor:"."===o[1]?te:"?"===o[1]?ie:"@"===o[1]?se:ee}),s.removeAttribute(e)}else e.startsWith(C)&&(a.push({type:6,index:r}),s.removeAttribute(e));if(B.test(s.tagName)){const e=s.textContent.split(C),t=e.length-1;if(t>0){s.textContent=S?S.emptyScript:"";for(let i=0;i<t;i++)s.append(e[i],M()),Q.nextNode(),a.push({type:2,index:++r});s.append(e[t],M())}}}else if(8===s.nodeType)if(s.data===T)a.push({type:2,index:r});else{let e=-1;for(;-1!==(e=s.data.indexOf(C,e+1));)a.push({type:7,index:r}),e+=C.length-1}r++}}static createElement(e,t){const i=O.createElement("template");return i.innerHTML=e,i}}function Z(e,t,i=e,s){if(t===F)return t;let r=void 0!==s?i._$Co?.[s]:i._$Cl;const n=U(t)?void 0:t._$litDirective$;return r?.constructor!==n&&(r?._$AO?.(!1),void 0===n?r=void 0:(r=new n(e),r._$AT(e,i,s)),void 0!==s?(i._$Co??=[])[s]=r:i._$Cl=r),void 0!==r&&(t=Z(e,r._$AS(e,t.values),r,s)),t}class X{constructor(e,t){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=t}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:t},parts:i}=this._$AD,s=(e?.creationScope??O).importNode(t,!0);Q.currentNode=s;let r=Q.nextNode(),n=0,o=0,a=i[0];for(;void 0!==a;){if(n===a.index){let t;2===a.type?t=new Y(r,r.nextSibling,this,e):1===a.type?t=new a.ctor(r,a.name,a.strings,this,e):6===a.type&&(t=new re(r,this,e)),this._$AV.push(t),a=i[++o]}n!==a?.index&&(r=Q.nextNode(),n++)}return Q.currentNode=O,s}p(e){let t=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(e,i,t),t+=i.strings.length-2):i._$AI(e[t])),t++}}class Y{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,t,i,s){this.type=2,this._$AH=W,this._$AN=void 0,this._$AA=e,this._$AB=t,this._$AM=i,this.options=s,this._$Cv=s?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const t=this._$AM;return void 0!==t&&11===e?.nodeType&&(e=t.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,t=this){e=Z(this,e,t),U(e)?e===W||null==e||""===e?(this._$AH!==W&&this._$AR(),this._$AH=W):e!==this._$AH&&e!==F&&this._(e):void 0!==e._$litType$?this.$(e):void 0!==e.nodeType?this.T(e):(e=>D(e)||"function"==typeof e?.[Symbol.iterator])(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==W&&U(this._$AH)?this._$AA.nextSibling.data=e:this.T(O.createTextNode(e)),this._$AH=e}$(e){const{values:t,_$litType$:i}=e,s="number"==typeof i?this._$AC(e):(void 0===i.el&&(i.el=K.createElement(G(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===s)this._$AH.p(t);else{const e=new X(s,this),i=e.u(this.options);e.p(t),this.T(i),this._$AH=e}}_$AC(e){let t=V.get(e.strings);return void 0===t&&V.set(e.strings,t=new K(e)),t}k(e){D(this._$AH)||(this._$AH=[],this._$AR());const t=this._$AH;let i,s=0;for(const r of e)s===t.length?t.push(i=new Y(this.O(M()),this.O(M()),this,this.options)):i=t[s],i._$AI(r),s++;s<t.length&&(this._$AR(i&&i._$AB.nextSibling,s),t.length=s)}_$AR(e=this._$AA.nextSibling,t){for(this._$AP?.(!1,!0,t);e!==this._$AB;){const t=A(e).nextSibling;A(e).remove(),e=t}}setConnected(e){void 0===this._$AM&&(this._$Cv=e,this._$AP?.(e))}}class ee{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,t,i,s,r){this.type=1,this._$AH=W,this._$AN=void 0,this.element=e,this.name=t,this._$AM=s,this.options=r,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=W}_$AI(e,t=this,i,s){const r=this.strings;let n=!1;if(void 0===r)e=Z(this,e,t,0),n=!U(e)||e!==this._$AH&&e!==F,n&&(this._$AH=e);else{const s=e;let o,a;for(e=r[0],o=0;o<r.length-1;o++)a=Z(this,s[i+o],t,o),a===F&&(a=this._$AH[o]),n||=!U(a)||a!==this._$AH[o],a===W?e=W:e!==W&&(e+=(a??"")+r[o+1]),this._$AH[o]=a}n&&!s&&this.j(e)}j(e){e===W?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class te extends ee{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===W?void 0:e}}class ie extends ee{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==W)}}class se extends ee{constructor(e,t,i,s,r){super(e,t,i,s,r),this.type=5}_$AI(e,t=this){if((e=Z(this,e,t,0)??W)===F)return;const i=this._$AH,s=e===W&&i!==W||e.capture!==i.capture||e.once!==i.once||e.passive!==i.passive,r=e!==W&&(i===W||s);s&&this.element.removeEventListener(this.name,this,i),r&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class re{constructor(e,t,i){this.element=e,this.type=6,this._$AN=void 0,this._$AM=t,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(e){Z(this,e)}}const ne=w.litHtmlPolyfillSupport;ne?.(K,Y),(w.litHtmlVersions??=[]).push("3.3.2");const oe=globalThis;
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */class ae extends ${constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const t=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=((e,t,i)=>{const s=i?.renderBefore??t;let r=s._$litPart$;if(void 0===r){const e=i?.renderBefore??null;s._$litPart$=r=new Y(t.insertBefore(M(),e),e,void 0,i??{})}return r._$AI(e),r})(t,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return F}}ae._$litElement$=!0,ae.finalized=!0,oe.litElementHydrateSupport?.({LitElement:ae});const de=oe.litElementPolyfillSupport;de?.({LitElement:ae}),(oe.litElementVersions??=[]).push("4.2.2");
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+const ce=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}):customElements.define(e,t)},le={attribute:!0,type:String,converter:x,reflect:!1,hasChanged:b},he=(e=le,t,i)=>{const{kind:s,metadata:r}=i;let n=globalThis.litPropertyMetadata.get(r);if(void 0===n&&globalThis.litPropertyMetadata.set(r,n=new Map),"setter"===s&&((e=Object.create(e)).wrapped=!0),n.set(i.name,e),"accessor"===s){const{name:s}=i;return{set(i){const r=t.get.call(this);t.set.call(this,i),this.requestUpdate(s,r,e,!0,i)},init(t){return void 0!==t&&this.C(s,void 0,e,t),t}}}if("setter"===s){const{name:s}=i;return function(i){const r=this[s];t.call(this,i),this.requestUpdate(s,r,e,!0,i)}}throw Error("Unsupported decorator location: "+s)};
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -37,17 +37,22 @@ const ct=t=>(e,s)=>{void 0!==s?s.addInitializer(()=>{customElements.define(t,e)}
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,e,s)=>{const i=e.hasOwnProperty(s);return e.constructor.createProperty(s,t),i?Object.getOwnPropertyDescriptor(e,s):void 0})(t,e,s)}({...t,state:!0,attribute:!1})}const ut="dot_quote0",_t=r`
+function pe(e){return function(e){return(t,i)=>"object"==typeof i?he(e,t,i):((e,t,i)=>{const s=t.hasOwnProperty(i);return t.constructor.createProperty(i,e),s?Object.getOwnPropertyDescriptor(t,i):void 0})(e,t,i)}({...e,state:!0,attribute:!1})}const ue="dot_quote0",ve=o`
+  /* ---- MD3 tokens ---- */
   :host {
-    --dot-card-bg: var(--ha-card-background, var(--card-background-color, #fff));
-    --dot-text: var(--primary-text-color, #212121);
-    --dot-secondary: var(--secondary-text-color, #727272);
-    --dot-accent: var(--primary-color, #03a9f4);
-    --dot-divider: var(--divider-color, rgba(0, 0, 0, 0.12));
-    --dot-success: var(--success-color, #4caf50);
-    --dot-error: var(--error-color, #f44336);
-    --dot-surface: var(--secondary-background-color, #f5f5f5);
-    --dot-ripple: var(--primary-color, #03a9f4);
+    --md-primary: var(--primary-color, #6750a4);
+    --md-on-primary: var(--text-primary-color, #fff);
+    --md-surface: var(--ha-card-background, var(--card-background-color, #fff));
+    --md-on-surface: var(--primary-text-color, #1c1b1f);
+    --md-on-surface-var: var(--secondary-text-color, #49454f);
+    --md-outline: var(--divider-color, rgba(0, 0, 0, 0.12));
+    --md-surface-var: var(--secondary-background-color, #f5f5f5);
+    --md-success: var(--success-color, #4caf50);
+    --md-error: var(--error-color, #f44336);
+    --md-r-sm: 8px;
+    --md-r-md: 12px;
+    --md-r-lg: 16px;
+    --md-r-full: 50px;
   }
 
   ha-card {
@@ -56,131 +61,179 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
 
   /* ---- Header ---- */
 
-  .card-header {
+  .md3-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 16px 8px;
+    padding: 14px 16px 10px;
+    background: color-mix(in srgb, var(--md-primary) 7%, var(--md-surface));
   }
 
-  .device-info {
+  .header-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   .device-name {
-    font-size: 1.1em;
-    font-weight: 500;
-    color: var(--dot-text);
+    font-size: 1.05em;
+    font-weight: 600;
+    color: var(--md-on-surface);
     letter-spacing: 0.01em;
   }
 
-  .device-meta {
-    font-size: 0.8em;
-    color: var(--dot-secondary);
-    letter-spacing: 0.02em;
+  .device-fw {
+    font-size: 0.72em;
+    color: var(--md-on-surface-var);
+    letter-spacing: 0.03em;
   }
 
-  /* Material Design chip-style online badge */
-  .status-chip {
+  /* Online pill — MD3 assist chip style */
+  .online-pill {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 0.72em;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-size: 0.68em;
+    font-weight: 700;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    padding: 4px 10px 4px 8px;
-    border-radius: 16px;
+    padding: 4px 10px 4px 7px;
+    border-radius: var(--md-r-full);
   }
 
-  .status-chip-dot {
-    width: 7px;
-    height: 7px;
+  .online-dot {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     flex-shrink: 0;
   }
 
-  .status-chip.online {
-    background: color-mix(in srgb, var(--dot-success) 15%, transparent);
-    color: var(--dot-success);
+  .online-pill.online {
+    background: color-mix(in srgb, var(--md-success) 16%, transparent);
+    color: var(--md-success);
   }
 
-  .status-chip.online .status-chip-dot {
-    background: var(--dot-success);
+  .online-pill.online .online-dot {
+    background: var(--md-success);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--md-success) 30%, transparent);
   }
 
-  .status-chip.offline {
-    background: color-mix(in srgb, var(--dot-error) 15%, transparent);
-    color: var(--dot-error);
+  .online-pill.offline {
+    background: color-mix(in srgb, var(--md-error) 14%, transparent);
+    color: var(--md-error);
   }
 
-  .status-chip.offline .status-chip-dot {
-    background: var(--dot-error);
+  .online-pill.offline .online-dot {
+    background: var(--md-error);
   }
 
-  /* ---- Section / Status grid ---- */
+  /* ---- Status grid — 3 equal columns ---- */
 
-  .section {
-    padding: 8px 16px 12px;
-  }
-
-  .section-title {
-    font-size: 0.72em;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--dot-secondary);
-    margin-bottom: 8px;
-  }
-
-  .status-grid {
+  .stat-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px 16px;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid var(--md-outline);
   }
 
-  .status-item {
+  .stat-cell {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    font-size: 0.875em;
-    padding: 2px 0;
+    text-align: center;
+    padding: 10px 6px 9px;
+    gap: 3px;
+    border-right: 1px solid var(--md-outline);
   }
 
-  .status-label {
-    color: var(--dot-secondary);
+  .stat-cell.no-border {
+    border-right: none;
   }
 
-  .status-value {
-    color: var(--dot-text);
-    font-weight: 500;
+  .stat-icon {
+    --mdc-icon-size: 17px;
+    color: var(--md-primary);
+  }
+
+  .stat-icon.battery {
+    color: color-mix(in srgb, var(--md-success) 80%, var(--md-primary));
+  }
+
+  .stat-icon.wifi {
+    color: color-mix(in srgb, var(--md-primary) 70%, var(--md-success));
+  }
+
+  .stat-label {
+    font-size: 0.6em;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--md-on-surface-var);
+  }
+
+  .stat-value {
+    font-size: 0.8em;
+    font-weight: 600;
+    color: var(--md-on-surface);
+    line-height: 1.2;
+  }
+
+  /* ---- Render-times row ---- */
+
+  .render-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 5px 14px 6px;
+    font-size: 0.76em;
+    color: var(--md-on-surface-var);
+    border-top: 1px solid var(--md-outline);
+    background: color-mix(in srgb, var(--md-surface-var) 55%, transparent);
+  }
+
+  .render-icon {
+    --mdc-icon-size: 13px;
+    color: var(--md-on-surface-var);
+    flex-shrink: 0;
+  }
+
+  .render-item strong {
+    font-weight: 600;
+    color: var(--md-on-surface);
+  }
+
+  .render-sep {
+    color: var(--md-outline);
+    padding: 0 2px;
   }
 
   /* ---- Divider ---- */
 
   .divider {
     height: 1px;
-    background: var(--dot-divider);
-    margin: 0 16px;
+    background: var(--md-outline);
   }
 
   /* ---- Preview ---- */
 
   .preview-section {
-    padding: 12px 16px;
+    padding: 10px 14px 12px;
+  }
+
+  .section-label {
+    font-size: 0.62em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--md-on-surface-var);
+    margin-bottom: 7px;
   }
 
   .preview-frame {
-    border-radius: 8px;
+    border-radius: var(--md-r-md);
     overflow: hidden;
-    border: 1.5px solid var(--dot-divider);
-    display: block;
+    border: 1px solid var(--md-outline);
     width: 100%;
     aspect-ratio: 296 / 152;
-    position: relative;
-    background: var(--dot-surface);
+    background: var(--md-surface-var);
   }
 
   .preview-frame img {
@@ -191,50 +244,70 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
     image-rendering: pixelated;
   }
 
-  /* SVG fallback inherits color for monochromatic theming */
   .preview-fallback {
     display: block;
     width: 100%;
     height: 100%;
-    color: var(--dot-text);
+    color: var(--md-on-surface);
   }
 
-  /* ---- Expandable sections ---- */
-
-  .expand-section {
-    /* no extra padding; header handles it */
-  }
+  /* ---- Expand sections ---- */
 
   .expand-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 16px;
+    gap: 10px;
+    padding: 10px 14px;
     cursor: pointer;
     user-select: none;
-    border-radius: 4px;
     transition: background 0.15s ease;
   }
 
   .expand-header:hover {
-    background: color-mix(in srgb, var(--dot-accent) 8%, transparent);
+    background: color-mix(in srgb, var(--md-on-surface) 5%, transparent);
   }
 
-  .expand-header .section-title {
-    margin-bottom: 0;
+  .expand-header.open {
+    background: color-mix(in srgb, var(--md-primary) 8%, transparent);
+  }
+
+  .expand-lead-icon {
+    --mdc-icon-size: 17px;
+    color: var(--md-on-surface-var);
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+
+  .expand-header.open .expand-lead-icon {
+    color: var(--md-primary);
+  }
+
+  .expand-label {
+    flex: 1;
+    font-size: 0.78em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--md-on-surface-var);
+    transition: color 0.15s;
+  }
+
+  .expand-header.open .expand-label {
+    color: var(--md-primary);
   }
 
   .expand-chevron {
-    color: var(--dot-secondary);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --mdc-icon-size: 18px;
+    color: var(--md-on-surface-var);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s;
     flex-shrink: 0;
   }
 
   .expand-chevron.open {
     transform: rotate(180deg);
+    color: var(--md-primary);
   }
 
-  /* Animate height via max-height trick */
   .expand-content {
     max-height: 0;
     overflow: hidden;
@@ -242,43 +315,34 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
   }
 
   .expand-content.open {
-    max-height: 600px;
+    max-height: 640px;
   }
 
   .expand-body {
-    padding: 4px 16px 16px;
+    padding: 2px 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
-  /* ---- Material text field / select sizing ---- */
+  /* ---- ha-textfield ---- */
 
-  ha-textfield,
-  ha-select {
+  ha-textfield {
     display: block;
     width: 100%;
   }
 
-  /* ---- Two-column row for selects ---- */
+  /* ---- File input ---- */
 
-  .md-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  /* ---- File input styled as Material outlined button ---- */
-
-  .file-input-group {
+  .file-field {
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
 
-  .file-input-label {
-    font-size: 0.75em;
-    color: var(--dot-secondary);
+  .file-field-label {
+    font-size: 0.7em;
+    color: var(--md-on-surface-var);
     letter-spacing: 0.02em;
   }
 
@@ -286,67 +350,159 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 14px;
-    border: 1.5px solid var(--dot-divider);
-    border-radius: 4px;
-    font-size: 0.875em;
-    color: var(--dot-text);
+    padding: 9px 14px;
+    border: 1.5px solid var(--md-outline);
+    border-radius: var(--md-r-sm);
+    font-size: 0.84em;
+    color: var(--md-primary);
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
     background: transparent;
+    transition: border-color 0.15s, background 0.15s;
   }
 
   .file-input-btn:hover {
-    border-color: var(--dot-accent);
-    background: color-mix(in srgb, var(--dot-accent) 6%, transparent);
+    border-color: var(--md-primary);
+    background: color-mix(in srgb, var(--md-primary) 6%, transparent);
   }
 
   .file-input-btn ha-icon {
-    color: var(--dot-accent);
-    --mdc-icon-size: 18px;
+    --mdc-icon-size: 16px;
+    flex-shrink: 0;
   }
 
   .file-input-btn input[type="file"] {
     display: none;
   }
 
-  /* ---- Button row (mwc-button) ---- */
+  /* ---- Native selects (MD3 outlined style) ---- */
 
-  .md-button-row {
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .md3-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .md3-field-label {
+    font-size: 0.7em;
+    color: var(--md-on-surface-var);
+    letter-spacing: 0.02em;
+  }
+
+  .md3-select {
+    width: 100%;
+    padding: 9px 32px 9px 11px;
+    border: 1.5px solid var(--md-outline);
+    border-radius: var(--md-r-sm);
+    background: transparent;
+    color: var(--md-on-surface);
+    font-size: 0.875em;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='%23888' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+    box-sizing: border-box;
+  }
+
+  .md3-select:focus {
+    border-color: var(--md-primary);
+    outline: none;
+  }
+
+  /* ---- MD3 native buttons ---- */
+
+  .action-row {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    padding-top: 4px;
+    padding-top: 2px;
   }
 
-  .md-button-row mwc-button {
-    --mdc-theme-primary: var(--dot-accent);
+  .md3-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    border-radius: var(--md-r-full);
+    font-size: 0.84em;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    transition: box-shadow 0.15s, filter 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+
+  .md3-btn ha-icon {
+    --mdc-icon-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .md3-btn.filled {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .md3-btn.filled:hover:not(:disabled) {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22), 0 1px 4px rgba(0, 0, 0, 0.14);
+    filter: brightness(1.06);
+  }
+
+  .md3-btn.filled:active:not(:disabled) {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+    filter: brightness(0.96);
+  }
+
+  .md3-btn.tonal {
+    background: color-mix(in srgb, var(--md-primary) 14%, var(--md-surface));
+    color: var(--md-primary);
+  }
+
+  .md3-btn.tonal:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--md-primary) 22%, var(--md-surface));
+  }
+
+  .md3-btn:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    box-shadow: none;
+    filter: none;
   }
 
   /* ---- Toast ---- */
 
   .card-footer {
-    padding: 0 16px 12px;
+    padding: 0 14px 12px;
   }
 
   .toast {
-    font-size: 0.8em;
+    font-size: 0.78em;
     padding: 8px 12px;
-    border-radius: 4px;
+    border-radius: var(--md-r-sm);
     text-align: center;
     letter-spacing: 0.02em;
   }
 
   .toast.success {
-    background: color-mix(in srgb, var(--dot-success) 15%, transparent);
-    color: var(--dot-success);
+    background: color-mix(in srgb, var(--md-success) 15%, transparent);
+    color: var(--md-success);
   }
 
   .toast.error {
-    background: color-mix(in srgb, var(--dot-error) 15%, transparent);
-    color: var(--dot-error);
+    background: color-mix(in srgb, var(--md-error) 15%, transparent);
+    color: var(--md-error);
   }
-`;let vt=null;async function gt(t){if(vt&&Date.now()-vt.ts<3e4)return vt.devices;const[e,s]=await Promise.all([t.connection.sendMessagePromise({type:"config/entity_registry/list"}),t.connection.sendMessagePromise({type:"config/device_registry/list"})]),i=e.filter(t=>t.platform===ut),n=new Set(i.map(t=>t.device_id)),o=new Map;for(const t of s)n.has(t.id)&&o.set(t.id,t);const r=new Map;for(const t of i){const e=o.get(t.device_id);if(!e)continue;let s=r.get(t.device_id);if(!s){const i=e.identifiers.find(([t])=>t===ut)?.[1]??"";s={ha_device_id:t.device_id,dot_device_id:i,name:e.name||`Quote/0 ${i.slice(-4)}`,entities:{}},r.set(t.device_id,s)}const i=t.unique_id.replace(`${s.dot_device_id}_`,"");s.entities[i]=t.entity_id}const a=Array.from(r.values());return vt={devices:a,ts:Date.now()},a}let ft=class extends at{constructor(){super(...arguments),this._devices=[],this._loading=!0}set hass(t){const e=this._hass;this._hass=t,t&&t!==e&&this._loadDevices()}get hass(){return this._hass}async _loadDevices(){try{this._devices=await gt(this._hass)}catch{this._devices=[]}this._loading=!1}setConfig(t){this._config={...t}}_dispatchChange(t){const e=new CustomEvent("config-changed",{detail:{config:t},bubbles:!0,composed:!0});this.dispatchEvent(e)}_deviceChanged(t){const e=t.target.value;this._dispatchChange({...this._config,device_id:e})}_checkboxChanged(t,e){const s=e.target.checked;this._dispatchChange({...this._config,[t]:s})}render(){return this._config?q`
+`;let me=null;async function fe(e){if(me&&Date.now()-me.ts<3e4)return me.devices;const[t,i]=await Promise.all([e.connection.sendMessagePromise({type:"config/entity_registry/list"}),e.connection.sendMessagePromise({type:"config/device_registry/list"})]),s=t.filter(e=>e.platform===ue),r=new Set(s.map(e=>e.device_id)),n=new Map;for(const e of i)r.has(e.id)&&n.set(e.id,e);const o=new Map;for(const e of s){const t=n.get(e.device_id);if(!t)continue;let i=o.get(e.device_id);if(!i){const s=t.identifiers.find(([e])=>e===ue)?.[1]??"";i={ha_device_id:e.device_id,dot_device_id:s,name:t.name||`Quote/0 ${s.slice(-4)}`,entities:{}},o.set(e.device_id,i)}const s=e.unique_id.replace(`${i.dot_device_id}_`,"");i.entities[s]=e.entity_id}const a=Array.from(o.values());return me={devices:a,ts:Date.now()},a}let ge=class extends ae{constructor(){super(...arguments),this._devices=[],this._loading=!0}set hass(e){const t=this._hass;this._hass=e,e&&e!==t&&this._loadDevices()}get hass(){return this._hass}async _loadDevices(){try{this._devices=await fe(this._hass)}catch{this._devices=[]}this._loading=!1}setConfig(e){this._config={...e}}_dispatchChange(e){const t=new CustomEvent("config-changed",{detail:{config:e},bubbles:!0,composed:!0});this.dispatchEvent(t)}_deviceChanged(e){const t=e.target.value;this._dispatchChange({...this._config,device_id:t})}_checkboxChanged(e,t){const i=t.target.checked;this._dispatchChange({...this._config,[e]:i})}render(){return this._config?q`
       <div class="editor">
         <div class="field">
           <label>Device</label>
@@ -355,12 +511,12 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
                   <option value="" ?selected=${!this._config.device_id}>
                     -- Select a Quote/0 device --
                   </option>
-                  ${this._devices.map(t=>q`
+                  ${this._devices.map(e=>q`
                       <option
-                        value=${t.dot_device_id}
-                        ?selected=${this._config.device_id===t.dot_device_id}
+                        value=${e.dot_device_id}
+                        ?selected=${this._config.device_id===e.dot_device_id}
                       >
-                        ${t.name}
+                        ${e.name}
                       </option>
                     `)}
                 </select>
@@ -375,7 +531,7 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
             <input
               type="checkbox"
               .checked=${!1!==this._config.show_preview}
-              @change=${t=>this._checkboxChanged("show_preview",t)}
+              @change=${e=>this._checkboxChanged("show_preview",e)}
             />
             Show e-ink preview
           </label>
@@ -385,7 +541,7 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
             <input
               type="checkbox"
               .checked=${!1!==this._config.show_send_text}
-              @change=${t=>this._checkboxChanged("show_send_text",t)}
+              @change=${e=>this._checkboxChanged("show_send_text",e)}
             />
             Show Send Text controls
           </label>
@@ -395,13 +551,13 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
             <input
               type="checkbox"
               .checked=${!1!==this._config.show_send_image}
-              @change=${t=>this._checkboxChanged("show_send_image",t)}
+              @change=${e=>this._checkboxChanged("show_send_image",e)}
             />
             Show Send Image controls
           </label>
         </div>
       </div>
-    `:q``}};ft.styles=r`
+    `:q``}};ge.styles=o`
     .editor {
       padding: 8px;
     }
@@ -435,192 +591,197 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
       color: var(--error-color, #db4437);
       margin-top: 4px;
     }
-  `,t([pt()],ft.prototype,"_config",void 0),t([pt()],ft.prototype,"_devices",void 0),t([pt()],ft.prototype,"_loading",void 0),ft=t([ct("dot-quote0-card-editor")],ft);let mt=class extends at{constructor(){super(...arguments),this._resolved=!1,this._textTitle="",this._textMessage="",this._textSignature="",this._imageData="",this._ditherType="DIFFUSION",this._border=0,this._toast="",this._toastType="success",this._sending=!1,this._sendTextExpanded=!1,this._sendImageExpanded=!1}set hass(t){const e=this._hass;this._hass=t,this.requestUpdate("hass",e),t&&this._config?.device_id&&!this._resolved&&this._resolveDevice()}get hass(){return this._hass}async _resolveDevice(){try{const t=await gt(this._hass);this._device=function(t,e){return t.find(t=>t.dot_device_id===e)}(t,this._config.device_id),this._resolved=!0}catch{}}static getConfigElement(){return document.createElement("dot-quote0-card-editor")}static getStubConfig(){return{device_id:"",show_preview:!0,show_send_text:!0,show_send_image:!0}}setConfig(t){if(!t.device_id)throw new Error("Please select a device");this._config=t,this._resolved=!1,this._hass&&this._resolveDevice()}getCardSize(){return 8}getGridOptions(){return{rows:8,columns:12,min_rows:4,min_columns:6}}_eid(t){return this._device?.entities[t]}_stateOf(t){const e=this._eid(t);return e?this.hass?.states[e]?.state??"unavailable":"unavailable"}_attrOf(t,e){const s=this._eid(t);if(s)return this.hass?.states[s]?.attributes?.[e]}_isOnline(){return"on"===this._stateOf("online")}_getPreviewImages(){if(!this._device)return[];for(const t of Object.keys(this._device.entities)){const e=this._device.entities[t],s=this.hass?.states[e];if(s?.attributes?.current_images)return s.attributes.current_images}return[]}async _showToast(t,e){this._toast=t,this._toastType=e,await new Promise(t=>setTimeout(t,3e3)),this._toast=""}async _handleSendText(){if(!this._sending){this._sending=!0;try{await this.hass.callService(ut,"send_text",{device_id:this._config.device_id,title:this._textTitle||void 0,message:this._textMessage||void 0,signature:this._textSignature||void 0,refresh_now:!0}),this._showToast("Text sent!","success")}catch(t){this._showToast(t.message||"Failed to send","error")}finally{this._sending=!1}}}async _handleSendImage(){if(!this._sending&&this._imageData){this._sending=!0;try{await this.hass.callService(ut,"send_image",{device_id:this._config.device_id,image:this._imageData,dither_type:this._ditherType,border:this._border,refresh_now:!0}),this._showToast("Image sent!","success")}catch(t){this._showToast(t.message||"Failed to send","error")}finally{this._sending=!1}}}async _handleNextContent(){const t=this._eid("next_content");if(t)try{await this.hass.callService("button","press",{entity_id:t}),this._showToast("Switched to next content","success")}catch(t){this._showToast(t.message||"Failed","error")}}_handleFileSelect(t){const e=t.target,s=e.files?.[0];if(!s)return;const i=new FileReader;i.onload=()=>{const t=i.result;this._imageData=t.split(",")[1]||t},i.readAsDataURL(s)}_renderStatus(){const t=this._isOnline(),e=this._stateOf("power_state"),s=this._stateOf("battery_status"),i=this._stateOf("wifi_signal"),n=this._stateOf("firmware_version"),o=this._stateOf("last_render"),r=this._stateOf("next_render_power"),a=this._device?.name||`Quote/0 ${this._config.device_id.slice(-4)}`;return q`
-      <div class="card-header">
-        <div class="device-info">
+  `,e([pe()],ge.prototype,"_config",void 0),e([pe()],ge.prototype,"_devices",void 0),e([pe()],ge.prototype,"_loading",void 0),ge=e([ce("dot-quote0-card-editor")],ge);let _e=class extends ae{constructor(){super(...arguments),this._resolved=!1,this._textTitle="",this._textMessage="",this._textSignature="",this._imageData="",this._ditherType="DIFFUSION",this._border=0,this._toast="",this._toastType="success",this._sending=!1,this._sendTextExpanded=!1,this._sendImageExpanded=!1}set hass(e){const t=this._hass;this._hass=e,this.requestUpdate("hass",t),e&&this._config?.device_id&&!this._resolved&&this._resolveDevice()}get hass(){return this._hass}async _resolveDevice(){try{const e=await fe(this._hass);this._device=function(e,t){return e.find(e=>e.dot_device_id===t)}(e,this._config.device_id),this._resolved=!0}catch{}}static getConfigElement(){return document.createElement("dot-quote0-card-editor")}static getStubConfig(){return{device_id:"",show_preview:!0,show_send_text:!0,show_send_image:!0}}setConfig(e){if(!e.device_id)throw new Error("Please select a device");this._config=e,this._resolved=!1,this._hass&&this._resolveDevice()}getCardSize(){return 8}getGridOptions(){return{rows:8,columns:12,min_rows:4,min_columns:6}}_eid(e){return this._device?.entities[e]}_stateOf(e){const t=this._eid(e);return t?this.hass?.states[t]?.state??"unavailable":"unavailable"}_isOnline(){return"on"===this._stateOf("online")}_getPreviewImages(){if(!this._device)return[];for(const e of Object.keys(this._device.entities)){const t=this._device.entities[e],i=this.hass?.states[t];if(i?.attributes?.current_images)return i.attributes.current_images}return[]}_batteryIcon(e){const t=parseInt(e);return isNaN(t)?"mdi:battery-unknown":t>=90?"mdi:battery":t>=70?"mdi:battery-80":t>=50?"mdi:battery-60":t>=30?"mdi:battery-40":t>=10?"mdi:battery-20":"mdi:battery-outline"}_wifiIcon(e){const t=parseFloat(e);return isNaN(t)?"mdi:wifi-off":t>=-50?"mdi:wifi-strength-4":t>=-60?"mdi:wifi-strength-3":t>=-70?"mdi:wifi-strength-2":"mdi:wifi-strength-1"}async _showToast(e,t){this._toast=e,this._toastType=t,await new Promise(e=>setTimeout(e,3e3)),this._toast=""}async _handleSendText(){if(!this._sending){this._sending=!0;try{await this.hass.callService(ue,"send_text",{device_id:this._config.device_id,title:this._textTitle||void 0,message:this._textMessage||void 0,signature:this._textSignature||void 0,refresh_now:!0}),this._showToast("Text sent!","success")}catch(e){this._showToast(e.message||"Failed to send","error")}finally{this._sending=!1}}}async _handleSendImage(){if(!this._sending&&this._imageData){this._sending=!0;try{await this.hass.callService(ue,"send_image",{device_id:this._config.device_id,image:this._imageData,dither_type:this._ditherType,border:this._border,refresh_now:!0}),this._showToast("Image sent!","success")}catch(e){this._showToast(e.message||"Failed to send","error")}finally{this._sending=!1}}}async _handleNextContent(){const e=this._eid("next_content");if(e)try{await this.hass.callService("button","press",{entity_id:e}),this._showToast("Switched to next content","success")}catch(e){this._showToast(e.message||"Failed","error")}}_handleFileSelect(e){const t=e.target,i=t.files?.[0];if(!i)return;const s=new FileReader;s.onload=()=>{const e=s.result;this._imageData=e.split(",")[1]||e},s.readAsDataURL(i)}_renderStatus(){const e=this._isOnline(),t=this._stateOf("power_state"),i=this._stateOf("battery_status"),s=this._stateOf("wifi_signal"),r=this._stateOf("firmware_version"),n=this._stateOf("last_render"),o=this._stateOf("next_render_power"),a=this._device?.name||`Quote/0 ${this._config.device_id.slice(-4)}`,d="unavailable"!==s?`${s} dBm`:"—",c="unavailable"!==i?i:"—";return q`
+      <div class="md3-header">
+        <div class="header-info">
           <span class="device-name">${a}</span>
-          <span class="device-meta">FW ${n}</span>
+          <span class="device-fw">FW&nbsp;${r}</span>
         </div>
-        <span class="status-chip ${t?"online":"offline"}">
-          <span class="status-chip-dot"></span>
-          ${t?"Online":"Offline"}
+        <span class="online-pill ${e?"online":"offline"}">
+          <span class="online-dot"></span>
+          ${e?"Online":"Offline"}
         </span>
       </div>
-      <div class="section">
-        <div class="section-title">Status</div>
-        <div class="status-grid">
-          <div class="status-item">
-            <span class="status-label">Power</span>
-            <span class="status-value">${e}</span>
-          </div>
-          <div class="status-item">
-            <span class="status-label">Battery</span>
-            <span class="status-value">${s}</span>
-          </div>
-          <div class="status-item">
-            <span class="status-label">Wi-Fi</span>
-            <span class="status-value">${"unavailable"!==i?i+" dBm":i}</span>
-          </div>
-          <div class="status-item">
-            <span class="status-label">Last render</span>
-            <span class="status-value">${o}</span>
-          </div>
-          <div class="status-item">
-            <span class="status-label">Next render</span>
-            <span class="status-value">${r}</span>
-          </div>
+
+      <div class="stat-grid">
+        <div class="stat-cell">
+          <ha-icon icon="mdi:lightning-bolt" class="stat-icon power"></ha-icon>
+          <span class="stat-label">Power</span>
+          <span class="stat-value">${t}</span>
+        </div>
+        <div class="stat-cell">
+          <ha-icon
+            icon="${this._batteryIcon(i)}"
+            class="stat-icon battery"
+          ></ha-icon>
+          <span class="stat-label">Battery</span>
+          <span class="stat-value">${c}</span>
+        </div>
+        <div class="stat-cell no-border">
+          <ha-icon
+            icon="${this._wifiIcon(s)}"
+            class="stat-icon wifi"
+          ></ha-icon>
+          <span class="stat-label">Wi-Fi</span>
+          <span class="stat-value">${d}</span>
         </div>
       </div>
-    `}_renderPreview(){if(!1===this._config.show_preview)return W;const t=this._getPreviewImages(),e=t.length>0?t[0]:null;return q`
+
+      <div class="render-row">
+        <ha-icon icon="mdi:history" class="render-icon"></ha-icon>
+        <span class="render-item">Last&nbsp;<strong>${n}</strong></span>
+        <span class="render-sep">·</span>
+        <ha-icon icon="mdi:timer-outline" class="render-icon"></ha-icon>
+        <span class="render-item">Next&nbsp;<strong>${o}</strong></span>
+      </div>
+    `}_renderPreview(){if(!1===this._config.show_preview)return W;const e=this._getPreviewImages(),t=e.length>0?e[0]:null;return q`
       <div class="divider"></div>
       <div class="preview-section">
-        <div class="section-title">Display Preview</div>
+        <div class="section-label">Display Preview</div>
         <div class="preview-frame">
-          ${e?q`<img src="${e}" alt="Current display" />`:q`
-                <svg class="preview-fallback" viewBox="0 0 296 152" xmlns="http://www.w3.org/2000/svg" aria-label="No preview available">
+          ${t?q`<img src="${t}" alt="Current display" />`:q`
+                <svg
+                  class="preview-fallback"
+                  viewBox="0 0 296 152"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-label="No preview available"
+                >
                   <defs>
                     <pattern id="dotgrid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                      <circle cx="1" cy="1" r="0.7" fill="currentColor" opacity="0.15"/>
+                      <circle cx="1" cy="1" r="0.7" fill="currentColor" opacity="0.15" />
                     </pattern>
                   </defs>
-                  <rect width="296" height="152" fill="url(#dotgrid)"/>
-                  <!-- Monitor frame -->
-                  <rect x="108" y="44" width="80" height="52" rx="5" ry="5"
-                    fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
-                  <!-- Screen area -->
-                  <rect x="113" y="49" width="70" height="38" rx="2" ry="2"
-                    fill="currentColor" opacity="0.08"/>
-                  <!-- Horizontal lines inside screen (text lines) -->
-                  <line x1="120" y1="60" x2="176" y2="60" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                  <line x1="120" y1="68" x2="166" y2="68" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                  <line x1="120" y1="76" x2="172" y2="76" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                  <!-- Stand -->
-                  <line x1="138" y1="96" x2="158" y2="96" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
-                  <line x1="148" y1="96" x2="148" y2="106" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
-                  <line x1="140" y1="106" x2="156" y2="106" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
-                  <!-- Label -->
-                  <text x="148" y="126" text-anchor="middle"
-                    font-size="9" font-family="Roboto, sans-serif" letter-spacing="0.5"
-                    fill="currentColor" opacity="0.4">NO PREVIEW AVAILABLE</text>
+                  <rect width="296" height="152" fill="url(#dotgrid)" />
+                  <rect x="108" y="42" width="80" height="52" rx="5"
+                    fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
+                  <rect x="113" y="47" width="70" height="38" rx="2"
+                    fill="currentColor" opacity="0.07" />
+                  <line x1="120" y1="58" x2="176" y2="58" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
+                  <line x1="120" y1="66" x2="166" y2="66" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
+                  <line x1="120" y1="74" x2="172" y2="74" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
+                  <line x1="138" y1="94" x2="158" y2="94" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
+                  <line x1="148" y1="94" x2="148" y2="104" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
+                  <line x1="140" y1="104" x2="156" y2="104" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
+                  <text x="148" y="124" text-anchor="middle" font-size="9"
+                    font-family="Roboto, sans-serif" letter-spacing="0.5"
+                    fill="currentColor" opacity="0.38">NO PREVIEW AVAILABLE</text>
                 </svg>
               `}
         </div>
       </div>
-    `}_renderSendText(){return!1===this._config.show_send_text?W:q`
+    `}_renderSendText(){if(!1===this._config.show_send_text)return W;const e=this._sendTextExpanded;return q`
       <div class="divider"></div>
       <div class="expand-section">
         <div
-          class="expand-header"
+          class="expand-header ${e?"open":""}"
           @click=${()=>this._sendTextExpanded=!this._sendTextExpanded}
           role="button"
-          aria-expanded=${this._sendTextExpanded}
+          aria-expanded=${e}
         >
-          <span class="section-title">Send Text</span>
-          <ha-icon
-            class="expand-chevron ${this._sendTextExpanded?"open":""}"
-            icon="mdi:chevron-down"
-          ></ha-icon>
+          <ha-icon class="expand-lead-icon" icon="mdi:card-text-outline"></ha-icon>
+          <span class="expand-label">Send Text</span>
+          <ha-icon class="expand-chevron ${e?"open":""}" icon="mdi:chevron-down"></ha-icon>
         </div>
-        <div class="expand-content ${this._sendTextExpanded?"open":""}">
+        <div class="expand-content ${e?"open":""}">
           <div class="expand-body">
             <ha-textfield
               label="Title"
               .value=${this._textTitle}
-              @input=${t=>this._textTitle=t.target.value}
+              @input=${e=>this._textTitle=e.target.value}
               style="width:100%"
             ></ha-textfield>
             <ha-textfield
               label="Message"
               .value=${this._textMessage}
-              @input=${t=>this._textMessage=t.target.value}
+              @input=${e=>this._textMessage=e.target.value}
               helper="Use \\n for line breaks"
               style="width:100%"
             ></ha-textfield>
             <ha-textfield
               label="Signature"
               .value=${this._textSignature}
-              @input=${t=>this._textSignature=t.target.value}
+              @input=${e=>this._textSignature=e.target.value}
               placeholder="e.g. 2025-08-04 20:00"
               style="width:100%"
             ></ha-textfield>
-            <div class="md-button-row">
-              <mwc-button
-                raised
-                label="Send Text"
+            <div class="action-row">
+              <button
+                class="md3-btn filled"
                 @click=${this._handleSendText}
                 ?disabled=${this._sending||!this._textTitle&&!this._textMessage}
-              ></mwc-button>
-              <mwc-button
-                outlined
-                label="Next Content"
+              >
+                <ha-icon icon="mdi:send"></ha-icon>
+                Send Text
+              </button>
+              <button
+                class="md3-btn tonal"
                 @click=${this._handleNextContent}
                 ?disabled=${this._sending}
-              ></mwc-button>
+              >
+                <ha-icon icon="mdi:skip-next-outline"></ha-icon>
+                Next Content
+              </button>
             </div>
           </div>
         </div>
       </div>
-    `}_renderSendImage(){return!1===this._config.show_send_image?W:q`
+    `}_renderSendImage(){if(!1===this._config.show_send_image)return W;const e=this._sendImageExpanded;return q`
       <div class="divider"></div>
       <div class="expand-section">
         <div
-          class="expand-header"
+          class="expand-header ${e?"open":""}"
           @click=${()=>this._sendImageExpanded=!this._sendImageExpanded}
           role="button"
-          aria-expanded=${this._sendImageExpanded}
+          aria-expanded=${e}
         >
-          <span class="section-title">Send Image</span>
-          <ha-icon
-            class="expand-chevron ${this._sendImageExpanded?"open":""}"
-            icon="mdi:chevron-down"
-          ></ha-icon>
+          <ha-icon class="expand-lead-icon" icon="mdi:image-outline"></ha-icon>
+          <span class="expand-label">Send Image</span>
+          <ha-icon class="expand-chevron ${e?"open":""}" icon="mdi:chevron-down"></ha-icon>
         </div>
-        <div class="expand-content ${this._sendImageExpanded?"open":""}">
+        <div class="expand-content ${e?"open":""}">
           <div class="expand-body">
-            <div class="file-input-group">
-              <span class="file-input-label">Image (296×152 PNG)</span>
+            <div class="file-field">
+              <span class="file-field-label">Image (296 × 152 PNG)</span>
               <label class="file-input-btn">
                 <ha-icon icon="mdi:image-plus"></ha-icon>
-                <span>${this._imageData?"Image selected":"Choose file…"}</span>
-                <input
-                  type="file"
-                  accept="image/png"
-                  @change=${this._handleFileSelect}
-                />
+                <span>${this._imageData?"Image selected ✓":"Choose file…"}</span>
+                <input type="file" accept="image/png" @change=${this._handleFileSelect} />
               </label>
             </div>
-            <div class="md-row">
-              <ha-select
-                label="Dither"
-                .value=${this._ditherType}
-                @selected=${t=>{const e=t.target;e.value&&(this._ditherType=e.value)}}
-                @closed=${t=>t.stopPropagation()}
-                fixedMenuPosition
-                naturalMenuWidth
-              >
-                <ha-list-item value="DIFFUSION">Diffusion</ha-list-item>
-                <ha-list-item value="ORDERED">Ordered</ha-list-item>
-                <ha-list-item value="NONE">None</ha-list-item>
-              </ha-select>
-              <ha-select
-                label="Border"
-                .value=${String(this._border)}
-                @selected=${t=>{const e=t.target;void 0!==e.value&&(this._border=parseInt(e.value))}}
-                @closed=${t=>t.stopPropagation()}
-                fixedMenuPosition
-                naturalMenuWidth
-              >
-                <ha-list-item value="0">White</ha-list-item>
-                <ha-list-item value="1">Black</ha-list-item>
-              </ha-select>
+            <div class="two-col">
+              <div class="md3-field">
+                <label class="md3-field-label">Dither</label>
+                <select
+                  class="md3-select"
+                  .value=${this._ditherType}
+                  @change=${e=>this._ditherType=e.target.value}
+                >
+                  <option value="DIFFUSION">Diffusion</option>
+                  <option value="ORDERED">Ordered</option>
+                  <option value="NONE">None</option>
+                </select>
+              </div>
+              <div class="md3-field">
+                <label class="md3-field-label">Border</label>
+                <select
+                  class="md3-select"
+                  .value=${String(this._border)}
+                  @change=${e=>this._border=parseInt(e.target.value)}
+                >
+                  <option value="0">White</option>
+                  <option value="1">Black</option>
+                </select>
+              </div>
             </div>
-            <div class="md-button-row">
-              <mwc-button
-                raised
-                label="Send Image"
+            <div class="action-row">
+              <button
+                class="md3-btn filled"
                 @click=${this._handleSendImage}
                 ?disabled=${this._sending||!this._imageData}
-              ></mwc-button>
+              >
+                <ha-icon icon="mdi:image-send"></ha-icon>
+                Send Image
+              </button>
             </div>
           </div>
         </div>
@@ -633,4 +794,4 @@ function pt(t){return function(t){return(e,s)=>"object"==typeof s?ht(t,e,s):((t,
               <div class="toast ${this._toastType}">${this._toast}</div>
             </div>`:W}
       </ha-card>
-    `:q`<ha-card><div class="section">Device not found. Check the integration.</div></ha-card>`:q`<ha-card><div class="section">Discovering device...</div></ha-card>`:q`<ha-card>Loading...</ha-card>`}};mt.styles=_t,t([pt()],mt.prototype,"_config",void 0),t([pt()],mt.prototype,"_device",void 0),t([pt()],mt.prototype,"_resolved",void 0),t([pt()],mt.prototype,"_textTitle",void 0),t([pt()],mt.prototype,"_textMessage",void 0),t([pt()],mt.prototype,"_textSignature",void 0),t([pt()],mt.prototype,"_imageData",void 0),t([pt()],mt.prototype,"_ditherType",void 0),t([pt()],mt.prototype,"_border",void 0),t([pt()],mt.prototype,"_toast",void 0),t([pt()],mt.prototype,"_toastType",void 0),t([pt()],mt.prototype,"_sending",void 0),t([pt()],mt.prototype,"_sendTextExpanded",void 0),t([pt()],mt.prototype,"_sendImageExpanded",void 0),mt=t([ct("dot-quote0-card")],mt),window.customCards=window.customCards||[],window.customCards.push({type:"dot-quote0-card",name:"Dot. Quote/0",description:"Control and monitor your Dot. Quote/0 e-ink device",preview:!1});export{mt as DotQuote0Card};
+    `:q`<ha-card><div class="section">Device not found. Check the integration.</div></ha-card>`:q`<ha-card><div class="section">Discovering device…</div></ha-card>`:q`<ha-card>Loading...</ha-card>`}};_e.styles=ve,e([pe()],_e.prototype,"_config",void 0),e([pe()],_e.prototype,"_device",void 0),e([pe()],_e.prototype,"_resolved",void 0),e([pe()],_e.prototype,"_textTitle",void 0),e([pe()],_e.prototype,"_textMessage",void 0),e([pe()],_e.prototype,"_textSignature",void 0),e([pe()],_e.prototype,"_imageData",void 0),e([pe()],_e.prototype,"_ditherType",void 0),e([pe()],_e.prototype,"_border",void 0),e([pe()],_e.prototype,"_toast",void 0),e([pe()],_e.prototype,"_toastType",void 0),e([pe()],_e.prototype,"_sending",void 0),e([pe()],_e.prototype,"_sendTextExpanded",void 0),e([pe()],_e.prototype,"_sendImageExpanded",void 0),_e=e([ce("dot-quote0-card")],_e),window.customCards=window.customCards||[],window.customCards.push({type:"dot-quote0-card",name:"Dot. Quote/0",description:"Control and monitor your Dot. Quote/0 e-ink device",preview:!1});export{_e as DotQuote0Card};

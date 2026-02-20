@@ -1,5 +1,5 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { DotQuote0CardConfig, Hass, DotDevice, DOMAIN } from "./types";
 import { cardStyles } from "./styles";
 import { discoverDevices, findDevice } from "./helpers";
@@ -81,7 +81,7 @@ export class DotQuote0Card extends LitElement {
     return { rows: 8, columns: 12, min_rows: 4, min_columns: 6 };
   }
 
-  // ---- Entity helpers: use registry-resolved entity_ids ----
+  // ---- Entity helpers ----
 
   private _eid(suffix: string): string | undefined {
     return this._device?.entities[suffix];
@@ -91,12 +91,6 @@ export class DotQuote0Card extends LitElement {
     const eid = this._eid(suffix);
     if (!eid) return "unavailable";
     return this.hass?.states[eid]?.state ?? "unavailable";
-  }
-
-  private _attrOf(suffix: string, attr: string): any {
-    const eid = this._eid(suffix);
-    if (!eid) return undefined;
-    return this.hass?.states[eid]?.attributes?.[attr];
   }
 
   private _isOnline(): boolean {
@@ -113,6 +107,28 @@ export class DotQuote0Card extends LitElement {
       }
     }
     return [];
+  }
+
+  // ---- Icon helpers ----
+
+  private _batteryIcon(pct: string): string {
+    const n = parseInt(pct);
+    if (isNaN(n)) return "mdi:battery-unknown";
+    if (n >= 90) return "mdi:battery";
+    if (n >= 70) return "mdi:battery-80";
+    if (n >= 50) return "mdi:battery-60";
+    if (n >= 30) return "mdi:battery-40";
+    if (n >= 10) return "mdi:battery-20";
+    return "mdi:battery-outline";
+  }
+
+  private _wifiIcon(dbm: string): string {
+    const n = parseFloat(dbm);
+    if (isNaN(n)) return "mdi:wifi-off";
+    if (n >= -50) return "mdi:wifi-strength-4";
+    if (n >= -60) return "mdi:wifi-strength-3";
+    if (n >= -70) return "mdi:wifi-strength-2";
+    return "mdi:wifi-strength-1";
   }
 
   // ---- Actions ----
@@ -166,9 +182,7 @@ export class DotQuote0Card extends LitElement {
     const eid = this._eid("next_content");
     if (!eid) return;
     try {
-      await this.hass.callService("button", "press", {
-        entity_id: eid,
-      });
+      await this.hass.callService("button", "press", { entity_id: eid });
       this._showToast("Switched to next content", "success");
     } catch (e: any) {
       this._showToast(e.message || "Failed", "error");
@@ -197,43 +211,55 @@ export class DotQuote0Card extends LitElement {
     const firmware = this._stateOf("firmware_version");
     const lastRender = this._stateOf("last_render");
     const nextPower = this._stateOf("next_render_power");
-    const name = this._device?.name || `Quote/0 ${this._config.device_id.slice(-4)}`;
+    const name =
+      this._device?.name ||
+      `Quote/0 ${this._config.device_id.slice(-4)}`;
+
+    const wifiVal = wifi !== "unavailable" ? `${wifi} dBm` : "—";
+    const battVal = battery !== "unavailable" ? battery : "—";
 
     return html`
-      <div class="card-header">
-        <div class="device-info">
+      <div class="md3-header">
+        <div class="header-info">
           <span class="device-name">${name}</span>
-          <span class="device-meta">FW ${firmware}</span>
+          <span class="device-fw">FW&nbsp;${firmware}</span>
         </div>
-        <span class="status-chip ${online ? "online" : "offline"}">
-          <span class="status-chip-dot"></span>
+        <span class="online-pill ${online ? "online" : "offline"}">
+          <span class="online-dot"></span>
           ${online ? "Online" : "Offline"}
         </span>
       </div>
-      <div class="section">
-        <div class="section-title">Status</div>
-        <div class="status-grid">
-          <div class="status-item">
-            <span class="status-label">Power</span>
-            <span class="status-value">${power}</span>
-          </div>
-          <div class="status-item">
-            <span class="status-label">Battery</span>
-            <span class="status-value">${battery}</span>
-          </div>
-          <div class="status-item">
-            <span class="status-label">Wi-Fi</span>
-            <span class="status-value">${wifi !== "unavailable" ? wifi + " dBm" : wifi}</span>
-          </div>
-          <div class="status-item">
-            <span class="status-label">Last render</span>
-            <span class="status-value">${lastRender}</span>
-          </div>
-          <div class="status-item">
-            <span class="status-label">Next render</span>
-            <span class="status-value">${nextPower}</span>
-          </div>
+
+      <div class="stat-grid">
+        <div class="stat-cell">
+          <ha-icon icon="mdi:lightning-bolt" class="stat-icon power"></ha-icon>
+          <span class="stat-label">Power</span>
+          <span class="stat-value">${power}</span>
         </div>
+        <div class="stat-cell">
+          <ha-icon
+            icon="${this._batteryIcon(battery)}"
+            class="stat-icon battery"
+          ></ha-icon>
+          <span class="stat-label">Battery</span>
+          <span class="stat-value">${battVal}</span>
+        </div>
+        <div class="stat-cell no-border">
+          <ha-icon
+            icon="${this._wifiIcon(wifi)}"
+            class="stat-icon wifi"
+          ></ha-icon>
+          <span class="stat-label">Wi-Fi</span>
+          <span class="stat-value">${wifiVal}</span>
+        </div>
+      </div>
+
+      <div class="render-row">
+        <ha-icon icon="mdi:history" class="render-icon"></ha-icon>
+        <span class="render-item">Last&nbsp;<strong>${lastRender}</strong></span>
+        <span class="render-sep">·</span>
+        <ha-icon icon="mdi:timer-outline" class="render-icon"></ha-icon>
+        <span class="render-item">Next&nbsp;<strong>${nextPower}</strong></span>
       </div>
     `;
   }
@@ -247,36 +273,36 @@ export class DotQuote0Card extends LitElement {
     return html`
       <div class="divider"></div>
       <div class="preview-section">
-        <div class="section-title">Display Preview</div>
+        <div class="section-label">Display Preview</div>
         <div class="preview-frame">
           ${src
             ? html`<img src="${src}" alt="Current display" />`
             : html`
-                <svg class="preview-fallback" viewBox="0 0 296 152" xmlns="http://www.w3.org/2000/svg" aria-label="No preview available">
+                <svg
+                  class="preview-fallback"
+                  viewBox="0 0 296 152"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-label="No preview available"
+                >
                   <defs>
                     <pattern id="dotgrid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                      <circle cx="1" cy="1" r="0.7" fill="currentColor" opacity="0.15"/>
+                      <circle cx="1" cy="1" r="0.7" fill="currentColor" opacity="0.15" />
                     </pattern>
                   </defs>
-                  <rect width="296" height="152" fill="url(#dotgrid)"/>
-                  <!-- Monitor frame -->
-                  <rect x="108" y="44" width="80" height="52" rx="5" ry="5"
-                    fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
-                  <!-- Screen area -->
-                  <rect x="113" y="49" width="70" height="38" rx="2" ry="2"
-                    fill="currentColor" opacity="0.08"/>
-                  <!-- Horizontal lines inside screen (text lines) -->
-                  <line x1="120" y1="60" x2="176" y2="60" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                  <line x1="120" y1="68" x2="166" y2="68" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                  <line x1="120" y1="76" x2="172" y2="76" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                  <!-- Stand -->
-                  <line x1="138" y1="96" x2="158" y2="96" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
-                  <line x1="148" y1="96" x2="148" y2="106" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
-                  <line x1="140" y1="106" x2="156" y2="106" stroke="currentColor" stroke-width="2.5" opacity="0.35"/>
-                  <!-- Label -->
-                  <text x="148" y="126" text-anchor="middle"
-                    font-size="9" font-family="Roboto, sans-serif" letter-spacing="0.5"
-                    fill="currentColor" opacity="0.4">NO PREVIEW AVAILABLE</text>
+                  <rect width="296" height="152" fill="url(#dotgrid)" />
+                  <rect x="108" y="42" width="80" height="52" rx="5"
+                    fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
+                  <rect x="113" y="47" width="70" height="38" rx="2"
+                    fill="currentColor" opacity="0.07" />
+                  <line x1="120" y1="58" x2="176" y2="58" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
+                  <line x1="120" y1="66" x2="166" y2="66" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
+                  <line x1="120" y1="74" x2="172" y2="74" stroke="currentColor" stroke-width="1.5" opacity="0.22" />
+                  <line x1="138" y1="94" x2="158" y2="94" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
+                  <line x1="148" y1="94" x2="148" y2="104" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
+                  <line x1="140" y1="104" x2="156" y2="104" stroke="currentColor" stroke-width="2.5" opacity="0.3" />
+                  <text x="148" y="124" text-anchor="middle" font-size="9"
+                    font-family="Roboto, sans-serif" letter-spacing="0.5"
+                    fill="currentColor" opacity="0.38">NO PREVIEW AVAILABLE</text>
                 </svg>
               `}
         </div>
@@ -286,23 +312,22 @@ export class DotQuote0Card extends LitElement {
 
   private _renderSendText() {
     if (this._config.show_send_text === false) return nothing;
+    const open = this._sendTextExpanded;
 
     return html`
       <div class="divider"></div>
       <div class="expand-section">
         <div
-          class="expand-header"
+          class="expand-header ${open ? "open" : ""}"
           @click=${() => (this._sendTextExpanded = !this._sendTextExpanded)}
           role="button"
-          aria-expanded=${this._sendTextExpanded}
+          aria-expanded=${open}
         >
-          <span class="section-title">Send Text</span>
-          <ha-icon
-            class="expand-chevron ${this._sendTextExpanded ? "open" : ""}"
-            icon="mdi:chevron-down"
-          ></ha-icon>
+          <ha-icon class="expand-lead-icon" icon="mdi:card-text-outline"></ha-icon>
+          <span class="expand-label">Send Text</span>
+          <ha-icon class="expand-chevron ${open ? "open" : ""}" icon="mdi:chevron-down"></ha-icon>
         </div>
-        <div class="expand-content ${this._sendTextExpanded ? "open" : ""}">
+        <div class="expand-content ${open ? "open" : ""}">
           <div class="expand-body">
             <ha-textfield
               label="Title"
@@ -327,20 +352,24 @@ export class DotQuote0Card extends LitElement {
               placeholder="e.g. 2025-08-04 20:00"
               style="width:100%"
             ></ha-textfield>
-            <div class="md-button-row">
-              <mwc-button
-                raised
-                label="Send Text"
+            <div class="action-row">
+              <button
+                class="md3-btn filled"
                 @click=${this._handleSendText}
                 ?disabled=${this._sending ||
                 (!this._textTitle && !this._textMessage)}
-              ></mwc-button>
-              <mwc-button
-                outlined
-                label="Next Content"
+              >
+                <ha-icon icon="mdi:send"></ha-icon>
+                Send Text
+              </button>
+              <button
+                class="md3-btn tonal"
                 @click=${this._handleNextContent}
                 ?disabled=${this._sending}
-              ></mwc-button>
+              >
+                <ha-icon icon="mdi:skip-next-outline"></ha-icon>
+                Next Content
+              </button>
             </div>
           </div>
         </div>
@@ -350,75 +379,69 @@ export class DotQuote0Card extends LitElement {
 
   private _renderSendImage() {
     if (this._config.show_send_image === false) return nothing;
+    const open = this._sendImageExpanded;
 
     return html`
       <div class="divider"></div>
       <div class="expand-section">
         <div
-          class="expand-header"
+          class="expand-header ${open ? "open" : ""}"
           @click=${() => (this._sendImageExpanded = !this._sendImageExpanded)}
           role="button"
-          aria-expanded=${this._sendImageExpanded}
+          aria-expanded=${open}
         >
-          <span class="section-title">Send Image</span>
-          <ha-icon
-            class="expand-chevron ${this._sendImageExpanded ? "open" : ""}"
-            icon="mdi:chevron-down"
-          ></ha-icon>
+          <ha-icon class="expand-lead-icon" icon="mdi:image-outline"></ha-icon>
+          <span class="expand-label">Send Image</span>
+          <ha-icon class="expand-chevron ${open ? "open" : ""}" icon="mdi:chevron-down"></ha-icon>
         </div>
-        <div class="expand-content ${this._sendImageExpanded ? "open" : ""}">
+        <div class="expand-content ${open ? "open" : ""}">
           <div class="expand-body">
-            <div class="file-input-group">
-              <span class="file-input-label">Image (296×152 PNG)</span>
+            <div class="file-field">
+              <span class="file-field-label">Image (296 × 152 PNG)</span>
               <label class="file-input-btn">
                 <ha-icon icon="mdi:image-plus"></ha-icon>
-                <span>${this._imageData ? "Image selected" : "Choose file…"}</span>
-                <input
-                  type="file"
-                  accept="image/png"
-                  @change=${this._handleFileSelect}
-                />
+                <span>${this._imageData ? "Image selected ✓" : "Choose file…"}</span>
+                <input type="file" accept="image/png" @change=${this._handleFileSelect} />
               </label>
             </div>
-            <div class="md-row">
-              <ha-select
-                label="Dither"
-                .value=${this._ditherType}
-                @selected=${(e: Event) => {
-                  const el = e.target as any;
-                  if (el.value) this._ditherType = el.value;
-                }}
-                @closed=${(e: Event) => e.stopPropagation()}
-                fixedMenuPosition
-                naturalMenuWidth
-              >
-                <ha-list-item value="DIFFUSION">Diffusion</ha-list-item>
-                <ha-list-item value="ORDERED">Ordered</ha-list-item>
-                <ha-list-item value="NONE">None</ha-list-item>
-              </ha-select>
-              <ha-select
-                label="Border"
-                .value=${String(this._border)}
-                @selected=${(e: Event) => {
-                  const el = e.target as any;
-                  if (el.value !== undefined)
-                    this._border = parseInt(el.value);
-                }}
-                @closed=${(e: Event) => e.stopPropagation()}
-                fixedMenuPosition
-                naturalMenuWidth
-              >
-                <ha-list-item value="0">White</ha-list-item>
-                <ha-list-item value="1">Black</ha-list-item>
-              </ha-select>
+            <div class="two-col">
+              <div class="md3-field">
+                <label class="md3-field-label">Dither</label>
+                <select
+                  class="md3-select"
+                  .value=${this._ditherType}
+                  @change=${(e: Event) =>
+                    (this._ditherType = (e.target as HTMLSelectElement).value)}
+                >
+                  <option value="DIFFUSION">Diffusion</option>
+                  <option value="ORDERED">Ordered</option>
+                  <option value="NONE">None</option>
+                </select>
+              </div>
+              <div class="md3-field">
+                <label class="md3-field-label">Border</label>
+                <select
+                  class="md3-select"
+                  .value=${String(this._border)}
+                  @change=${(e: Event) =>
+                    (this._border = parseInt(
+                      (e.target as HTMLSelectElement).value,
+                    ))}
+                >
+                  <option value="0">White</option>
+                  <option value="1">Black</option>
+                </select>
+              </div>
             </div>
-            <div class="md-button-row">
-              <mwc-button
-                raised
-                label="Send Image"
+            <div class="action-row">
+              <button
+                class="md3-btn filled"
                 @click=${this._handleSendImage}
                 ?disabled=${this._sending || !this._imageData}
-              ></mwc-button>
+              >
+                <ha-icon icon="mdi:image-send"></ha-icon>
+                Send Image
+              </button>
             </div>
           </div>
         </div>
@@ -432,7 +455,7 @@ export class DotQuote0Card extends LitElement {
     }
 
     if (!this._resolved) {
-      return html`<ha-card><div class="section">Discovering device...</div></ha-card>`;
+      return html`<ha-card><div class="section">Discovering device…</div></ha-card>`;
     }
 
     if (!this._device) {

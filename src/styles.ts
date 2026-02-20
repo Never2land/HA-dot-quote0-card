@@ -1,16 +1,21 @@
 import { css } from "lit";
 
 export const cardStyles = css`
+  /* ---- MD3 tokens ---- */
   :host {
-    --dot-card-bg: var(--ha-card-background, var(--card-background-color, #fff));
-    --dot-text: var(--primary-text-color, #212121);
-    --dot-secondary: var(--secondary-text-color, #727272);
-    --dot-accent: var(--primary-color, #03a9f4);
-    --dot-divider: var(--divider-color, rgba(0, 0, 0, 0.12));
-    --dot-success: var(--success-color, #4caf50);
-    --dot-error: var(--error-color, #f44336);
-    --dot-surface: var(--secondary-background-color, #f5f5f5);
-    --dot-ripple: var(--primary-color, #03a9f4);
+    --md-primary: var(--primary-color, #6750a4);
+    --md-on-primary: var(--text-primary-color, #fff);
+    --md-surface: var(--ha-card-background, var(--card-background-color, #fff));
+    --md-on-surface: var(--primary-text-color, #1c1b1f);
+    --md-on-surface-var: var(--secondary-text-color, #49454f);
+    --md-outline: var(--divider-color, rgba(0, 0, 0, 0.12));
+    --md-surface-var: var(--secondary-background-color, #f5f5f5);
+    --md-success: var(--success-color, #4caf50);
+    --md-error: var(--error-color, #f44336);
+    --md-r-sm: 8px;
+    --md-r-md: 12px;
+    --md-r-lg: 16px;
+    --md-r-full: 50px;
   }
 
   ha-card {
@@ -19,131 +24,179 @@ export const cardStyles = css`
 
   /* ---- Header ---- */
 
-  .card-header {
+  .md3-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 16px 8px;
+    padding: 14px 16px 10px;
+    background: color-mix(in srgb, var(--md-primary) 7%, var(--md-surface));
   }
 
-  .device-info {
+  .header-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   .device-name {
-    font-size: 1.1em;
-    font-weight: 500;
-    color: var(--dot-text);
+    font-size: 1.05em;
+    font-weight: 600;
+    color: var(--md-on-surface);
     letter-spacing: 0.01em;
   }
 
-  .device-meta {
-    font-size: 0.8em;
-    color: var(--dot-secondary);
-    letter-spacing: 0.02em;
+  .device-fw {
+    font-size: 0.72em;
+    color: var(--md-on-surface-var);
+    letter-spacing: 0.03em;
   }
 
-  /* Material Design chip-style online badge */
-  .status-chip {
+  /* Online pill — MD3 assist chip style */
+  .online-pill {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 0.72em;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-size: 0.68em;
+    font-weight: 700;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    padding: 4px 10px 4px 8px;
-    border-radius: 16px;
+    padding: 4px 10px 4px 7px;
+    border-radius: var(--md-r-full);
   }
 
-  .status-chip-dot {
-    width: 7px;
-    height: 7px;
+  .online-dot {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     flex-shrink: 0;
   }
 
-  .status-chip.online {
-    background: color-mix(in srgb, var(--dot-success) 15%, transparent);
-    color: var(--dot-success);
+  .online-pill.online {
+    background: color-mix(in srgb, var(--md-success) 16%, transparent);
+    color: var(--md-success);
   }
 
-  .status-chip.online .status-chip-dot {
-    background: var(--dot-success);
+  .online-pill.online .online-dot {
+    background: var(--md-success);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--md-success) 30%, transparent);
   }
 
-  .status-chip.offline {
-    background: color-mix(in srgb, var(--dot-error) 15%, transparent);
-    color: var(--dot-error);
+  .online-pill.offline {
+    background: color-mix(in srgb, var(--md-error) 14%, transparent);
+    color: var(--md-error);
   }
 
-  .status-chip.offline .status-chip-dot {
-    background: var(--dot-error);
+  .online-pill.offline .online-dot {
+    background: var(--md-error);
   }
 
-  /* ---- Section / Status grid ---- */
+  /* ---- Status grid — 3 equal columns ---- */
 
-  .section {
-    padding: 8px 16px 12px;
-  }
-
-  .section-title {
-    font-size: 0.72em;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--dot-secondary);
-    margin-bottom: 8px;
-  }
-
-  .status-grid {
+  .stat-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px 16px;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid var(--md-outline);
   }
 
-  .status-item {
+  .stat-cell {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    font-size: 0.875em;
-    padding: 2px 0;
+    text-align: center;
+    padding: 10px 6px 9px;
+    gap: 3px;
+    border-right: 1px solid var(--md-outline);
   }
 
-  .status-label {
-    color: var(--dot-secondary);
+  .stat-cell.no-border {
+    border-right: none;
   }
 
-  .status-value {
-    color: var(--dot-text);
-    font-weight: 500;
+  .stat-icon {
+    --mdc-icon-size: 17px;
+    color: var(--md-primary);
+  }
+
+  .stat-icon.battery {
+    color: color-mix(in srgb, var(--md-success) 80%, var(--md-primary));
+  }
+
+  .stat-icon.wifi {
+    color: color-mix(in srgb, var(--md-primary) 70%, var(--md-success));
+  }
+
+  .stat-label {
+    font-size: 0.6em;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--md-on-surface-var);
+  }
+
+  .stat-value {
+    font-size: 0.8em;
+    font-weight: 600;
+    color: var(--md-on-surface);
+    line-height: 1.2;
+  }
+
+  /* ---- Render-times row ---- */
+
+  .render-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 5px 14px 6px;
+    font-size: 0.76em;
+    color: var(--md-on-surface-var);
+    border-top: 1px solid var(--md-outline);
+    background: color-mix(in srgb, var(--md-surface-var) 55%, transparent);
+  }
+
+  .render-icon {
+    --mdc-icon-size: 13px;
+    color: var(--md-on-surface-var);
+    flex-shrink: 0;
+  }
+
+  .render-item strong {
+    font-weight: 600;
+    color: var(--md-on-surface);
+  }
+
+  .render-sep {
+    color: var(--md-outline);
+    padding: 0 2px;
   }
 
   /* ---- Divider ---- */
 
   .divider {
     height: 1px;
-    background: var(--dot-divider);
-    margin: 0 16px;
+    background: var(--md-outline);
   }
 
   /* ---- Preview ---- */
 
   .preview-section {
-    padding: 12px 16px;
+    padding: 10px 14px 12px;
+  }
+
+  .section-label {
+    font-size: 0.62em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--md-on-surface-var);
+    margin-bottom: 7px;
   }
 
   .preview-frame {
-    border-radius: 8px;
+    border-radius: var(--md-r-md);
     overflow: hidden;
-    border: 1.5px solid var(--dot-divider);
-    display: block;
+    border: 1px solid var(--md-outline);
     width: 100%;
     aspect-ratio: 296 / 152;
-    position: relative;
-    background: var(--dot-surface);
+    background: var(--md-surface-var);
   }
 
   .preview-frame img {
@@ -154,50 +207,70 @@ export const cardStyles = css`
     image-rendering: pixelated;
   }
 
-  /* SVG fallback inherits color for monochromatic theming */
   .preview-fallback {
     display: block;
     width: 100%;
     height: 100%;
-    color: var(--dot-text);
+    color: var(--md-on-surface);
   }
 
-  /* ---- Expandable sections ---- */
-
-  .expand-section {
-    /* no extra padding; header handles it */
-  }
+  /* ---- Expand sections ---- */
 
   .expand-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 16px;
+    gap: 10px;
+    padding: 10px 14px;
     cursor: pointer;
     user-select: none;
-    border-radius: 4px;
     transition: background 0.15s ease;
   }
 
   .expand-header:hover {
-    background: color-mix(in srgb, var(--dot-accent) 8%, transparent);
+    background: color-mix(in srgb, var(--md-on-surface) 5%, transparent);
   }
 
-  .expand-header .section-title {
-    margin-bottom: 0;
+  .expand-header.open {
+    background: color-mix(in srgb, var(--md-primary) 8%, transparent);
+  }
+
+  .expand-lead-icon {
+    --mdc-icon-size: 17px;
+    color: var(--md-on-surface-var);
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+
+  .expand-header.open .expand-lead-icon {
+    color: var(--md-primary);
+  }
+
+  .expand-label {
+    flex: 1;
+    font-size: 0.78em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--md-on-surface-var);
+    transition: color 0.15s;
+  }
+
+  .expand-header.open .expand-label {
+    color: var(--md-primary);
   }
 
   .expand-chevron {
-    color: var(--dot-secondary);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --mdc-icon-size: 18px;
+    color: var(--md-on-surface-var);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s;
     flex-shrink: 0;
   }
 
   .expand-chevron.open {
     transform: rotate(180deg);
+    color: var(--md-primary);
   }
 
-  /* Animate height via max-height trick */
   .expand-content {
     max-height: 0;
     overflow: hidden;
@@ -205,43 +278,34 @@ export const cardStyles = css`
   }
 
   .expand-content.open {
-    max-height: 600px;
+    max-height: 640px;
   }
 
   .expand-body {
-    padding: 4px 16px 16px;
+    padding: 2px 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
-  /* ---- Material text field / select sizing ---- */
+  /* ---- ha-textfield ---- */
 
-  ha-textfield,
-  ha-select {
+  ha-textfield {
     display: block;
     width: 100%;
   }
 
-  /* ---- Two-column row for selects ---- */
+  /* ---- File input ---- */
 
-  .md-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  /* ---- File input styled as Material outlined button ---- */
-
-  .file-input-group {
+  .file-field {
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
 
-  .file-input-label {
-    font-size: 0.75em;
-    color: var(--dot-secondary);
+  .file-field-label {
+    font-size: 0.7em;
+    color: var(--md-on-surface-var);
     letter-spacing: 0.02em;
   }
 
@@ -249,64 +313,156 @@ export const cardStyles = css`
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 14px;
-    border: 1.5px solid var(--dot-divider);
-    border-radius: 4px;
-    font-size: 0.875em;
-    color: var(--dot-text);
+    padding: 9px 14px;
+    border: 1.5px solid var(--md-outline);
+    border-radius: var(--md-r-sm);
+    font-size: 0.84em;
+    color: var(--md-primary);
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
     background: transparent;
+    transition: border-color 0.15s, background 0.15s;
   }
 
   .file-input-btn:hover {
-    border-color: var(--dot-accent);
-    background: color-mix(in srgb, var(--dot-accent) 6%, transparent);
+    border-color: var(--md-primary);
+    background: color-mix(in srgb, var(--md-primary) 6%, transparent);
   }
 
   .file-input-btn ha-icon {
-    color: var(--dot-accent);
-    --mdc-icon-size: 18px;
+    --mdc-icon-size: 16px;
+    flex-shrink: 0;
   }
 
   .file-input-btn input[type="file"] {
     display: none;
   }
 
-  /* ---- Button row (mwc-button) ---- */
+  /* ---- Native selects (MD3 outlined style) ---- */
 
-  .md-button-row {
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .md3-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .md3-field-label {
+    font-size: 0.7em;
+    color: var(--md-on-surface-var);
+    letter-spacing: 0.02em;
+  }
+
+  .md3-select {
+    width: 100%;
+    padding: 9px 32px 9px 11px;
+    border: 1.5px solid var(--md-outline);
+    border-radius: var(--md-r-sm);
+    background: transparent;
+    color: var(--md-on-surface);
+    font-size: 0.875em;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='%23888' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+    box-sizing: border-box;
+  }
+
+  .md3-select:focus {
+    border-color: var(--md-primary);
+    outline: none;
+  }
+
+  /* ---- MD3 native buttons ---- */
+
+  .action-row {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    padding-top: 4px;
+    padding-top: 2px;
   }
 
-  .md-button-row mwc-button {
-    --mdc-theme-primary: var(--dot-accent);
+  .md3-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    border-radius: var(--md-r-full);
+    font-size: 0.84em;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    transition: box-shadow 0.15s, filter 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+
+  .md3-btn ha-icon {
+    --mdc-icon-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .md3-btn.filled {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .md3-btn.filled:hover:not(:disabled) {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22), 0 1px 4px rgba(0, 0, 0, 0.14);
+    filter: brightness(1.06);
+  }
+
+  .md3-btn.filled:active:not(:disabled) {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+    filter: brightness(0.96);
+  }
+
+  .md3-btn.tonal {
+    background: color-mix(in srgb, var(--md-primary) 14%, var(--md-surface));
+    color: var(--md-primary);
+  }
+
+  .md3-btn.tonal:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--md-primary) 22%, var(--md-surface));
+  }
+
+  .md3-btn:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    box-shadow: none;
+    filter: none;
   }
 
   /* ---- Toast ---- */
 
   .card-footer {
-    padding: 0 16px 12px;
+    padding: 0 14px 12px;
   }
 
   .toast {
-    font-size: 0.8em;
+    font-size: 0.78em;
     padding: 8px 12px;
-    border-radius: 4px;
+    border-radius: var(--md-r-sm);
     text-align: center;
     letter-spacing: 0.02em;
   }
 
   .toast.success {
-    background: color-mix(in srgb, var(--dot-success) 15%, transparent);
-    color: var(--dot-success);
+    background: color-mix(in srgb, var(--md-success) 15%, transparent);
+    color: var(--md-success);
   }
 
   .toast.error {
-    background: color-mix(in srgb, var(--dot-error) 15%, transparent);
-    color: var(--dot-error);
+    background: color-mix(in srgb, var(--md-error) 15%, transparent);
+    color: var(--md-error);
   }
 `;
