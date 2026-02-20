@@ -5,24 +5,35 @@ import { discoverDevices } from "./helpers";
 
 @customElement("dot-quote0-card-editor")
 export class DotQuote0CardEditor extends LitElement {
-  @property({ attribute: false }) public hass!: Hass;
   @state() private _config!: DotQuote0CardConfig;
   @state() private _devices: DotDevice[] = [];
   @state() private _loading = true;
 
-  setConfig(config: DotQuote0CardConfig): void {
-    this._config = { ...config };
+  private _hass!: Hass;
+
+  set hass(hass: Hass) {
+    const old = this._hass;
+    this._hass = hass;
+    if (hass && hass !== old) {
+      this._loadDevices();
+    }
   }
 
-  protected async updated(changed: Map<string, unknown>): Promise<void> {
-    if (changed.has("hass") && this.hass) {
-      try {
-        this._devices = await discoverDevices(this.hass);
-      } catch {
-        this._devices = [];
-      }
-      this._loading = false;
+  get hass(): Hass {
+    return this._hass;
+  }
+
+  private async _loadDevices(): Promise<void> {
+    try {
+      this._devices = await discoverDevices(this._hass);
+    } catch {
+      this._devices = [];
     }
+    this._loading = false;
+  }
+
+  setConfig(config: DotQuote0CardConfig): void {
+    this._config = { ...config };
   }
 
   private _dispatchChange(newConfig: DotQuote0CardConfig): void {
