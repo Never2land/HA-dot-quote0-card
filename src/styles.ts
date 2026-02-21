@@ -25,6 +25,7 @@ export const cardStyles = css`
   /* ---- Hero preview — full-width, touches card edges ---- */
 
   .hero-frame {
+    position: relative;
     width: 100%;
     aspect-ratio: 296 / 152;
     background: var(--md-surface-var);
@@ -38,6 +39,21 @@ export const cardStyles = css`
     height: 100%;
     object-fit: contain;
     image-rendering: pixelated;
+  }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 6px;
+    right: 8px;
+    font-size: 0.65em;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: var(--md-r-full);
+    background: color-mix(in srgb, var(--md-primary) 85%, transparent);
+    color: var(--md-on-primary);
+    pointer-events: none;
   }
 
   .hero-fallback {

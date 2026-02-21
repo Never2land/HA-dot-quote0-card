@@ -21,6 +21,7 @@ export class DotQuote0Card extends LitElement {
   @state() private _toastType: "success" | "error" = "success";
   @state() private _sending = false;
   @state() private _generating = false;
+  @state() private _generatedPreview = "";
 
   @state() private _sendTextExpanded = false;
   @state() private _sendImageExpanded = false;
@@ -171,6 +172,7 @@ export class DotQuote0Card extends LitElement {
         border: this._border,
         refresh_now: true,
       });
+      this._generatedPreview = "";
       this._showToast("Image sent!", "success");
     } catch (e: any) {
       this._showToast(e.message || "Failed to send", "error");
@@ -190,7 +192,7 @@ export class DotQuote0Card extends LitElement {
     }
   }
 
-  private _snapToEink(dataUrl: string): Promise<string> {
+  private _snapToEink(dataUrl: string): Promise<{ base64: string; dataUrl: string }> {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => {
@@ -201,7 +203,7 @@ export class DotQuote0Card extends LitElement {
         ctx.imageSmoothingEnabled = false; // nearest-neighbour — preserve hard pixel edges
         ctx.drawImage(img, 0, 0, 296, 152);
         const result = canvas.toDataURL("image/png");
-        resolve(result.split(",")[1]);
+        resolve({ base64: result.split(",")[1], dataUrl: result });
       };
       img.onerror = () => reject(new Error("Failed to load generated image"));
       img.src = dataUrl;
@@ -259,7 +261,9 @@ export class DotQuote0Card extends LitElement {
       if (!part?.inlineData?.data) throw new Error("No image in response");
 
       const dataUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-      this._imageData = await this._snapToEink(dataUrl);
+      const snapped = await this._snapToEink(dataUrl);
+      this._imageData = snapped.base64;
+      this._generatedPreview = snapped.dataUrl;
       this._showToast("Art generated! Review and send.", "success");
     } catch (e: any) {
       this._showToast(e.message || "Generation failed", "error");
@@ -272,6 +276,7 @@ export class DotQuote0Card extends LitElement {
     const input = ev.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
+    this._generatedPreview = "";
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
@@ -285,13 +290,19 @@ export class DotQuote0Card extends LitElement {
   private _renderHero() {
     if (this._config.show_preview === false) return nothing;
 
+    const generatedSrc = this._generatedPreview;
     const images = this._getPreviewImages();
-    const src = images.length > 0 ? images[0] : null;
+    const src = generatedSrc || (images.length > 0 ? images[0] : null);
 
     return html`
       <div class="hero-frame">
         ${src
-          ? html`<img class="hero-img" src="${src}" alt="Current display" />`
+          ? html`
+              <img class="hero-img" src="${src}" alt="Current display" />
+              ${generatedSrc
+                ? html`<div class="hero-badge">Preview — not sent yet</div>`
+                : nothing}
+            `
           : html`
               <svg
                 class="hero-fallback"
