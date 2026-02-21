@@ -190,7 +190,7 @@ export class DotQuote0Card extends LitElement {
     }
   }
 
-  private _resizeToEink(dataUrl: string): Promise<string> {
+  private _snapToEink(dataUrl: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => {
@@ -198,7 +198,7 @@ export class DotQuote0Card extends LitElement {
         canvas.width = 296;
         canvas.height = 152;
         const ctx = canvas.getContext("2d")!;
-        ctx.filter = "grayscale(1) contrast(1.1)";
+        ctx.imageSmoothingEnabled = false; // nearest-neighbour — preserve hard pixel edges
         ctx.drawImage(img, 0, 0, 296, 152);
         const result = canvas.toDataURL("image/png");
         resolve(result.split(",")[1]);
@@ -217,18 +217,24 @@ export class DotQuote0Card extends LitElement {
     if (this._generating) return;
     this._generating = true;
 
-    const styles = [
-      "minimalist geometric black and white line art",
-      "botanical illustration black and white ink sketch",
-      "architectural blueprint-style drawing in black and white",
-      "abstract expressionist black and white pattern",
-      "traditional woodblock print style black and white",
-      "circuit board inspired geometric black and white design",
-      "Japanese sumi-e ink brush painting in black and white",
-      "vintage scientific illustration black and white engraving",
+    const scenes = [
+      "a tiny sleeping cat curled up on a windowsill with rain outside",
+      "a cute chubby robot watering a small potted cactus",
+      "a happy frog wearing a tiny top hat sitting on a mushroom",
+      "a little astronaut floating in space waving at stars",
+      "a cozy teapot with steam hearts floating above it",
+      "a chubby penguin sliding down a snowy hill",
+      "a small owl reading a book by candlelight",
+      "a cheerful sun wearing sunglasses over rolling hills",
+      "a tiny hedgehog carrying a huge backpack through a forest",
+      "a smiling cloud raining hearts on little flowers",
     ];
-    const style = styles[Math.floor(Math.random() * styles.length)];
-    const prompt = `Create a ${style} suitable for a small e-ink display. High contrast, no gradients, pure black and white only. Landscape orientation.`;
+    const scene = scenes[Math.floor(Math.random() * scenes.length)];
+    const prompt =
+      `Pixel art, 296 by 152 pixels, pure black and white only, ` +
+      `chunky 8-bit style pixels clearly visible, high contrast, no gradients, no grey, ` +
+      `cute and fun scene: ${scene}. ` +
+      `Fill the entire 296x152 canvas. Landscape orientation. Dithered where needed for depth.`;
 
     try {
       const res = await fetch(
@@ -253,7 +259,7 @@ export class DotQuote0Card extends LitElement {
       if (!part?.inlineData?.data) throw new Error("No image in response");
 
       const dataUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-      this._imageData = await this._resizeToEink(dataUrl);
+      this._imageData = await this._snapToEink(dataUrl);
       this._showToast("Art generated! Review and send.", "success");
     } catch (e: any) {
       this._showToast(e.message || "Generation failed", "error");
