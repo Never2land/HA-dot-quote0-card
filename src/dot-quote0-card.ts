@@ -20,6 +20,7 @@ export class DotQuote0Card extends LitElement {
   @state() private _toast = "";
   @state() private _toastType: "success" | "error" = "success";
   @state() private _sending = false;
+  @state() private _generating = false;
 
   @state() private _sendTextExpanded = false;
   @state() private _sendImageExpanded = false;
@@ -186,6 +187,78 @@ export class DotQuote0Card extends LitElement {
       this._showToast("Switched to next content", "success");
     } catch (e: any) {
       this._showToast(e.message || "Failed", "error");
+    }
+  }
+
+  private _resizeToEink(dataUrl: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 296;
+        canvas.height = 152;
+        const ctx = canvas.getContext("2d")!;
+        ctx.filter = "grayscale(1) contrast(1.1)";
+        ctx.drawImage(img, 0, 0, 296, 152);
+        const result = canvas.toDataURL("image/png");
+        resolve(result.split(",")[1]);
+      };
+      img.onerror = () => reject(new Error("Failed to load generated image"));
+      img.src = dataUrl;
+    });
+  }
+
+  private async _handleGenerateImage() {
+    const apiKey = this._config.gemini_api_key;
+    if (!apiKey) {
+      this._showToast("Add a Gemini API key in the card editor first", "error");
+      return;
+    }
+    if (this._generating) return;
+    this._generating = true;
+
+    const styles = [
+      "minimalist geometric black and white line art",
+      "botanical illustration black and white ink sketch",
+      "architectural blueprint-style drawing in black and white",
+      "abstract expressionist black and white pattern",
+      "traditional woodblock print style black and white",
+      "circuit board inspired geometric black and white design",
+      "Japanese sumi-e ink brush painting in black and white",
+      "vintage scientific illustration black and white engraving",
+    ];
+    const style = styles[Math.floor(Math.random() * styles.length)];
+    const prompt = `Create a ${style} suitable for a small e-ink display. High contrast, no gradients, pure black and white only. Landscape orientation.`;
+
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { responseModalities: ["TEXT", "IMAGE"] },
+          }),
+        },
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `API error ${res.status}`);
+      }
+      const data = await res.json();
+      const part = data?.candidates?.[0]?.content?.parts?.find(
+        (p: any) => p.inlineData?.mimeType?.startsWith("image/"),
+      );
+      if (!part?.inlineData?.data) throw new Error("No image in response");
+
+      const dataUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+      this._imageData = await this._resizeToEink(dataUrl);
+      this._showToast("Art generated! Review and send.", "success");
+    } catch (e: any) {
+      this._showToast(e.message || "Generation failed", "error");
+    } finally {
+      this._generating = false;
     }
   }
 
@@ -389,6 +462,18 @@ export class DotQuote0Card extends LitElement {
         </div>
         <div class="expand-content ${open ? "open" : ""}">
           <div class="expand-body">
+            ${this._config.gemini_api_key
+              ? html`
+                  <button
+                    class="md3-btn tonal full-width"
+                    @click=${this._handleGenerateImage}
+                    ?disabled=${this._generating || this._sending}
+                  >
+                    <ha-icon icon="mdi:creation"></ha-icon>
+                    ${this._generating ? "Generating…" : "✨ Generate Art"}
+                  </button>
+                `
+              : nothing}
             <div class="file-field">
               <span class="file-field-label">Image (296 × 152 PNG)</span>
               <label class="file-input-btn">

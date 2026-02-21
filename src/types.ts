@@ -4,6 +4,7 @@ export interface DotQuote0CardConfig {
   show_preview?: boolean;
   show_send_text?: boolean;
   show_send_image?: boolean;
+  gemini_api_key?: string;
 }
 
 export interface HassEntityState {

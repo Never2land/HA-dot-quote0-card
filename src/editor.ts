@@ -121,6 +121,21 @@ export class DotQuote0CardEditor extends LitElement {
             Show Send Image controls
           </label>
         </div>
+        <div class="field">
+          <label class="text-label">Gemini API Key (for AI art generation)</label>
+          <input
+            type="password"
+            class="text-input"
+            .value=${this._config.gemini_api_key || ""}
+            placeholder="AIza…"
+            @input=${(e: Event) =>
+              this._dispatchChange({
+                ...this._config,
+                gemini_api_key: (e.target as HTMLInputElement).value || undefined,
+              })}
+          />
+          <div class="hint-neutral">Optional. Used only in the browser — never sent to HA.</div>
+        </div>
       </div>
     `;
   }
@@ -157,6 +172,27 @@ export class DotQuote0CardEditor extends LitElement {
     .hint {
       font-size: 0.8em;
       color: var(--error-color, #db4437);
+      margin-top: 4px;
+    }
+    .text-label {
+      display: block;
+      font-size: 0.85em;
+      margin-bottom: 4px;
+      color: var(--secondary-text-color);
+    }
+    .text-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      border: 1px solid var(--divider-color, #e0e0e0);
+      border-radius: 4px;
+      background: var(--ha-card-background, var(--card-background-color, #fff));
+      color: var(--primary-text-color);
+      font-size: 0.9em;
+    }
+    .hint-neutral {
+      font-size: 0.78em;
+      color: var(--secondary-text-color);
       margin-top: 4px;
     }
   `;
