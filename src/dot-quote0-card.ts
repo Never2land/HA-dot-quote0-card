@@ -22,6 +22,7 @@ export class DotQuote0Card extends LitElement {
   @state() private _sending = false;
   @state() private _generating = false;
   @state() private _generatedPreview = "";
+  @state() private _generatedScene = "";
 
   @state() private _sendTextExpanded = false;
   @state() private _sendImageExpanded = false;
@@ -173,6 +174,7 @@ export class DotQuote0Card extends LitElement {
         refresh_now: true,
       });
       this._generatedPreview = "";
+      this._generatedScene = "";
       this._showToast("Image sent!", "success");
     } catch (e: any) {
       this._showToast(e.message || "Failed to send", "error");
@@ -218,28 +220,51 @@ export class DotQuote0Card extends LitElement {
     }
     if (this._generating) return;
     this._generating = true;
-
-    const scenes = [
-      "a tiny sleeping cat curled up on a windowsill with rain outside",
-      "a cute chubby robot watering a small potted cactus",
-      "a happy frog wearing a tiny top hat sitting on a mushroom",
-      "a little astronaut floating in space waving at stars",
-      "a cozy teapot with steam hearts floating above it",
-      "a chubby penguin sliding down a snowy hill",
-      "a small owl reading a book by candlelight",
-      "a cheerful sun wearing sunglasses over rolling hills",
-      "a tiny hedgehog carrying a huge backpack through a forest",
-      "a smiling cloud raining hearts on little flowers",
-    ];
-    const scene = scenes[Math.floor(Math.random() * scenes.length)];
-    const prompt =
-      `Pixel art, 296 by 152 pixels, pure black and white only, ` +
-      `chunky 8-bit style pixels clearly visible, high contrast, no gradients, no grey, ` +
-      `cute and fun scene: ${scene}. ` +
-      `Fill the entire 296x152 canvas. Landscape orientation. Dithered where needed for depth.`;
+    this._generatedScene = "";
 
     try {
-      const res = await fetch(
+      // ── Step 1: Director — gemini-2.5-flash-lite generates the scene ──
+      const directorRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text:
+                  `You are an art director for a small monochrome e-ink display (296×152 pixels, 1-bit black and white). ` +
+                  `Generate a single highly descriptive scene that will look stunning as high-contrast B&W art. ` +
+                  `Randomly pick one of these four aesthetics: ` +
+                  `(1) lo-fi sci-fi / nostalgic tech — retro monitors overgrown with vines, glowing soldering irons, dusty arcade cabinets; ` +
+                  `(2) cozy macabre / mild goth — friendly ghosts brewing coffee, glowing potions on dark shelves, crows in dithered fog; ` +
+                  `(3) zen nature / ukiyo-e — bonsai silhouette against a dithered moon, lone heron with geometric ripples, woodblock mountain peaks; ` +
+                  `(4) moody architecture — rain-slicked cobblestone streets under a lamplight, lit window in a gothic mansion, empty bench under a weeping willow. ` +
+                  `Focus on strong silhouettes, dramatic lighting, clear negative space, and interesting geometry. ` +
+                  `Output only the scene description as a single sentence. No preamble, no quotes, no labels.`,
+              }],
+            }],
+            generationConfig: { maxOutputTokens: 80 },
+          }),
+        },
+      );
+      if (!directorRes.ok) {
+        const err = await directorRes.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `Director error ${directorRes.status}`);
+      }
+      const directorData = await directorRes.json();
+      const scene = directorData?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+      if (!scene) throw new Error("No scene description returned");
+      this._generatedScene = scene;
+
+      // ── Step 2: Artist — gemini-3.1-flash-image-preview renders it ──
+      const prompt =
+        `1-bit pixel art, exactly 296x152 resolution, pure monochrome black and white only, ` +
+        `absolutely no grayscale and no anti-aliasing. High contrast, strong silhouettes, bold outlines, ` +
+        `lots of clean negative space. Use stylized ordered Bayer dithering for texture and shading. ` +
+        `Aesthetic e-ink display art. Scene: ${scene}. Fill the canvas, landscape orientation.`;
+
+      const artistRes = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${apiKey}`,
         {
           method: "POST",
@@ -250,12 +275,12 @@ export class DotQuote0Card extends LitElement {
           }),
         },
       );
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err?.error?.message || `API error ${res.status}`);
+      if (!artistRes.ok) {
+        const err = await artistRes.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `Artist error ${artistRes.status}`);
       }
-      const data = await res.json();
-      const part = data?.candidates?.[0]?.content?.parts?.find(
+      const artistData = await artistRes.json();
+      const part = artistData?.candidates?.[0]?.content?.parts?.find(
         (p: any) => p.inlineData?.mimeType?.startsWith("image/"),
       );
       if (!part?.inlineData?.data) throw new Error("No image in response");
@@ -266,6 +291,7 @@ export class DotQuote0Card extends LitElement {
       this._generatedPreview = snapped.dataUrl;
       this._showToast("Art generated! Review and send.", "success");
     } catch (e: any) {
+      this._generatedScene = "";
       this._showToast(e.message || "Generation failed", "error");
     } finally {
       this._generating = false;
@@ -277,6 +303,7 @@ export class DotQuote0Card extends LitElement {
     const file = input.files?.[0];
     if (!file) return;
     this._generatedPreview = "";
+    this._generatedScene = "";
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
@@ -489,6 +516,9 @@ export class DotQuote0Card extends LitElement {
                     <ha-icon icon="mdi:creation"></ha-icon>
                     ${this._generating ? "Generating…" : "✨ Generate Art"}
                   </button>
+                  ${this._generatedScene
+                    ? html`<div class="scene-label">"${this._generatedScene}"</div>`
+                    : nothing}
                 `
               : nothing}
             <div class="file-field">

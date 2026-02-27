@@ -281,6 +281,18 @@ export const cardStyles = css`
     gap: 10px;
   }
 
+  /* ---- Generated scene label ---- */
+
+  .scene-label {
+    font-size: 0.73em;
+    font-style: italic;
+    color: var(--md-on-surface-var);
+    line-height: 1.4;
+    padding: 2px 4px;
+    border-left: 2px solid color-mix(in srgb, var(--md-primary) 40%, transparent);
+    margin-top: -2px;
+  }
+
   /* ---- ha-textfield ---- */
 
   ha-textfield {
