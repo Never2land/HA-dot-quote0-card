@@ -233,18 +233,19 @@ export class DotQuote0Card extends LitElement {
             contents: [{
               parts: [{
                 text:
-                  `You are an art director for a small monochrome e-ink display (296×152 pixels, 1-bit black and white). ` +
-                  `Generate a single highly descriptive scene that will look stunning as high-contrast B&W art. ` +
-                  `Randomly pick one of these four aesthetics: ` +
-                  `(1) lo-fi sci-fi / nostalgic tech — retro monitors overgrown with vines, glowing soldering irons, dusty arcade cabinets; ` +
-                  `(2) cozy macabre / mild goth — friendly ghosts brewing coffee, glowing potions on dark shelves, crows in dithered fog; ` +
-                  `(3) zen nature / ukiyo-e — bonsai silhouette against a dithered moon, lone heron with geometric ripples, woodblock mountain peaks; ` +
-                  `(4) moody architecture — rain-slicked cobblestone streets under a lamplight, lit window in a gothic mansion, empty bench under a weeping willow. ` +
-                  `Focus on strong silhouettes, dramatic lighting, clear negative space, and interesting geometry. ` +
+                  `You are a cinematic art director for a monochrome e-ink display (296×152 pixels, 1-bit black and white). ` +
+                  `Generate a single highly descriptive frozen-frame scene inspired by the visual aesthetics of Love Death + Robots, Cyberpunk: Edgerunners, or similar dark sci-fi anime. ` +
+                  `Randomly pick one of these five vibes: ` +
+                  `(1) Edgerunners street-level — a chrome-armed mercenary crouched on a rain-slicked megacity overpass, neon kanji signs glowing through the downpour, corporate towers looming in the fog; ` +
+                  `(2) LDR mechanical surrealism — a giant derelict robot half-buried in a desert, its cracked eye socket still faintly glowing, wild grass pushing through its chest cavity; ` +
+                  `(3) tech-noir lone figure — a silhouetted netrunner jacking into a dark terminal in an alley, holographic data streams fragmenting around them; ` +
+                  `(4) corpo dystopia — a vast brutalist megastructure dwarfing a tiny street-level market stall, searchlights cutting through smog, cables tangled everywhere; ` +
+                  `(5) LDR alien vignette — an astronaut in a battered suit sitting quietly on a crater rim, an enormous alien gas giant filling the sky, absolute silence implied. ` +
+                  `Think strong silhouettes, extreme light-dark contrast, dramatic single-source lighting, and interesting foreground-to-background depth. ` +
                   `Output only the scene description as a single sentence. No preamble, no quotes, no labels.`,
               }],
             }],
-            generationConfig: { maxOutputTokens: 80 },
+            generationConfig: { maxOutputTokens: 120 },
           }),
         },
       );
