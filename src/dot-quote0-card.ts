@@ -21,6 +21,7 @@ export class DotQuote0Card extends LitElement {
   @state() private _toastType: "success" | "error" = "success";
   @state() private _sending = false;
   @state() private _generating = false;
+  @state() private _generatingText = false;
   @state() private _generatedPreview = "";
   @state() private _generatedScene = "";
 
@@ -191,6 +192,67 @@ export class DotQuote0Card extends LitElement {
       this._showToast("Switched to next content", "success");
     } catch (e: any) {
       this._showToast(e.message || "Failed", "error");
+    }
+  }
+
+  private async _handleGenerateText() {
+    const apiKey = this._config.gemini_api_key;
+    if (!apiKey) {
+      this._showToast("Add a Gemini API key in the card editor first", "error");
+      return;
+    }
+    if (this._generatingText) return;
+    this._generatingText = true;
+
+    const today = new Date().toLocaleDateString("en-US", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric",
+    });
+    const datestamp = new Date().toLocaleDateString("en-US", {
+      month: "short", day: "numeric", year: "numeric",
+    });
+
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text:
+                  `Today is ${today}. Generate either a surprising fun fact or a fascinating event that happened on this day in history. ` +
+                  `It should be genuinely interesting, unexpected, or delightfully weird. ` +
+                  `Format it for a tiny e-ink display — punchy and concise. ` +
+                  `Respond with a JSON object with exactly these three fields: ` +
+                  `"title" (max 5 words, no punctuation at end), ` +
+                  `"message" (max 2 short sentences, plain text, no markdown), ` +
+                  `"signature" (exactly "— ${datestamp}").`,
+              }],
+            }],
+            generationConfig: {
+              maxOutputTokens: 200,
+              responseMimeType: "application/json",
+            },
+          }),
+        },
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `API error ${res.status}`);
+      }
+      const data = await res.json();
+      const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+      if (!raw) throw new Error("No content returned");
+      const parsed = JSON.parse(raw);
+      this._textTitle = parsed.title ?? "";
+      this._textMessage = parsed.message ?? "";
+      this._textSignature = parsed.signature ?? "";
+      this._showToast("Generated! Edit if needed, then send.", "success");
+    } catch (e: any) {
+      this._showToast(e.message || "Generation failed", "error");
+    } finally {
+      this._generatingText = false;
     }
   }
 
@@ -449,6 +511,18 @@ export class DotQuote0Card extends LitElement {
         </div>
         <div class="expand-content ${open ? "open" : ""}">
           <div class="expand-body">
+            ${this._config.gemini_api_key
+              ? html`
+                  <button
+                    class="md3-btn tonal full-width"
+                    @click=${this._handleGenerateText}
+                    ?disabled=${this._generatingText || this._sending}
+                  >
+                    <ha-icon icon="mdi:newspaper-variant-outline"></ha-icon>
+                    ${this._generatingText ? "Generating…" : "✨ Generate Fact / News"}
+                  </button>
+                `
+              : nothing}
             <ha-textfield
               label="Title"
               .value=${this._textTitle}
