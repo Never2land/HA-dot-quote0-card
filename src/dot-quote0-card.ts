@@ -223,11 +223,11 @@ export class DotQuote0Card extends LitElement {
                 text:
                   `Today is ${today}. Generate either a surprising fun fact or a fascinating event that happened on this day in history. ` +
                   `It should be genuinely interesting, unexpected, or delightfully weird. ` +
-                  `Format it for a tiny e-ink display — punchy and concise. ` +
-                  `Respond with a JSON object with exactly these three fields: ` +
-                  `"title" (max 5 words, no punctuation at end), ` +
-                  `"message" (max 2 short sentences, plain text, no markdown), ` +
-                  `"signature" (exactly "— ${datestamp}").`,
+                  `CRITICAL: this text will be rendered on a 296×152 pixel e-ink display. Strict limits apply — content beyond these limits will be cut off: ` +
+                  `"title": max 30 characters (1 short line, no punctuation at end); ` +
+                  `"message": max 120 characters total, split into at most 4 short lines using \\n between lines (~30 chars per line), plain text only, no markdown; ` +
+                  `"signature": max 30 characters, exactly "— ${datestamp}". ` +
+                  `Respond with a JSON object with exactly these three fields. Count characters carefully.`,
               }],
             }],
             generationConfig: {
@@ -245,9 +245,10 @@ export class DotQuote0Card extends LitElement {
       const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
       if (!raw) throw new Error("No content returned");
       const parsed = JSON.parse(raw);
-      this._textTitle = parsed.title ?? "";
-      this._textMessage = parsed.message ?? "";
-      this._textSignature = parsed.signature ?? "";
+      // Hard-cap as a safety net — display cuts off beyond these limits
+      this._textTitle = (parsed.title ?? "").slice(0, 30);
+      this._textMessage = (parsed.message ?? "").slice(0, 120);
+      this._textSignature = (parsed.signature ?? "").slice(0, 30);
       this._showToast("Generated! Edit if needed, then send.", "success");
     } catch (e: any) {
       this._showToast(e.message || "Generation failed", "error");
