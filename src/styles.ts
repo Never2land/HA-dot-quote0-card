@@ -275,7 +275,7 @@ export const cardStyles = css`
   }
 
   .expand-body {
-    padding: 2px 14px 16px;
+    padding: 10px 14px 16px;
     display: flex;
     flex-direction: column;
     gap: 10px;
