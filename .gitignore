@@ -1,2 +1,12 @@
 node_modules/
 .DS_Store
+
+# Environment variables / secrets — never commit these
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+*.secret
+secrets.yaml
+secrets.json

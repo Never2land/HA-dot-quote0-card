@@ -22,6 +22,7 @@ export class DotQuote0Card extends LitElement {
   @state() private _sending = false;
   @state() private _generating = false;
   @state() private _generatingText = false;
+  @state() private _refreshing = false;
   @state() private _generatedPreview = "";
   @state() private _generatedScene = "";
 
@@ -192,6 +193,47 @@ export class DotQuote0Card extends LitElement {
       this._showToast("Switched to next content", "success");
     } catch (e: any) {
       this._showToast(e.message || "Failed", "error");
+    }
+  }
+
+  private _makeSolidPng(color: "white" | "black"): string {
+    const canvas = document.createElement("canvas");
+    canvas.width = 296;
+    canvas.height = 152;
+    const ctx = canvas.getContext("2d")!;
+    ctx.fillStyle = color === "white" ? "#ffffff" : "#000000";
+    ctx.fillRect(0, 0, 296, 152);
+    return canvas.toDataURL("image/png").split(",")[1];
+  }
+
+  private async _handleRefreshDisplay() {
+    if (this._refreshing || this._sending) return;
+    this._refreshing = true;
+    try {
+      const serial = this._device!.dot_device_id;
+      // Step 1: Send all-white to push every pixel to one extreme
+      await this.hass.callService(DOMAIN, "send_image", {
+        serial,
+        image: this._makeSolidPng("white"),
+        dither_type: "NONE",
+        border: 0,
+        refresh_now: true,
+      });
+      // Wait for the e-ink to finish rendering before the next frame
+      await new Promise((r) => setTimeout(r, 3000));
+      // Step 2: Send all-black to push every pixel to the opposite extreme
+      await this.hass.callService(DOMAIN, "send_image", {
+        serial,
+        image: this._makeSolidPng("black"),
+        dither_type: "NONE",
+        border: 1,
+        refresh_now: true,
+      });
+      this._showToast("Display refresh sent (white → black)", "success");
+    } catch (e: any) {
+      this._showToast(e.message || "Refresh failed", "error");
+    } finally {
+      this._refreshing = false;
     }
   }
 
@@ -494,6 +536,21 @@ export class DotQuote0Card extends LitElement {
     `;
   }
 
+  private _renderRefreshDisplay() {
+    return html`
+      <div class="next-content-row">
+        <button
+          class="md3-btn tonal full-width"
+          @click=${this._handleRefreshDisplay}
+          ?disabled=${this._refreshing || this._sending}
+        >
+          <ha-icon icon="mdi:monitor-shimmer"></ha-icon>
+          ${this._refreshing ? "Refreshing…" : "Clear Ghosting"}
+        </button>
+      </div>
+    `;
+  }
+
   private _renderSendText() {
     if (this._config.show_send_text === false) return nothing;
     const open = this._sendTextExpanded;
@@ -669,6 +726,7 @@ export class DotQuote0Card extends LitElement {
         ${this._renderInfo()}
         <div class="divider"></div>
         ${this._renderNextContent()}
+        ${this._renderRefreshDisplay()}
         <div class="divider"></div>
         ${this._renderSendText()}
         ${this._renderSendImage()}
