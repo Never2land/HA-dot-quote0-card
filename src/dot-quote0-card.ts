@@ -408,12 +408,12 @@ export class DotQuote0Card extends LitElement {
     const input = ev.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
-    this._generatedPreview = "";
     this._generatedScene = "";
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
       this._imageData = result.split(",")[1] || result;
+      this._generatedPreview = result;
     };
     reader.readAsDataURL(file);
   }
