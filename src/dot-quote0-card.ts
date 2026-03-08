@@ -220,7 +220,7 @@ export class DotQuote0Card extends LitElement {
         refresh_now: true,
       });
       // Wait for the e-ink to finish rendering before the next frame
-      await new Promise((r) => setTimeout(r, 3000));
+      await new Promise((r) => setTimeout(r, 10000));
       // Step 2: Send all-black to push every pixel to the opposite extreme
       await this.hass.callService(DOMAIN, "send_image", {
         serial,
