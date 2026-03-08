@@ -196,13 +196,18 @@ export class DotQuote0Card extends LitElement {
     }
   }
 
-  private _makeSolidPng(color: "white" | "black"): string {
+  private _makePatternPng(phase: 0 | 1): string {
     const canvas = document.createElement("canvas");
     canvas.width = 296;
     canvas.height = 152;
     const ctx = canvas.getContext("2d")!;
-    ctx.fillStyle = color === "white" ? "#ffffff" : "#000000";
-    ctx.fillRect(0, 0, 296, 152);
+    // Draw alternating 1px horizontal stripes.
+    // Phase 0: even rows white, odd rows black
+    // Phase 1: even rows black, odd rows white  (inverted)
+    for (let y = 0; y < 152; y++) {
+      ctx.fillStyle = (y % 2 === phase) ? "#000000" : "#ffffff";
+      ctx.fillRect(0, y, 296, 1);
+    }
     return canvas.toDataURL("image/png").split(",")[1];
   }
 
@@ -211,25 +216,25 @@ export class DotQuote0Card extends LitElement {
     this._refreshing = true;
     try {
       const serial = this._device!.dot_device_id;
-      // Step 1: Send all-white to push every pixel to one extreme
+      // Step 1: Send stripe pattern (even=white, odd=black)
       await this.hass.callService(DOMAIN, "send_image", {
         serial,
-        image: this._makeSolidPng("white"),
+        image: this._makePatternPng(0),
         dither_type: "NONE",
         border: 0,
         refresh_now: true,
       });
       // Wait for the e-ink to finish rendering before the next frame
       await new Promise((r) => setTimeout(r, 10000));
-      // Step 2: Send all-black to push every pixel to the opposite extreme
+      // Step 2: Send inverted stripe pattern — every pixel flips
       await this.hass.callService(DOMAIN, "send_image", {
         serial,
-        image: this._makeSolidPng("black"),
+        image: this._makePatternPng(1),
         dither_type: "NONE",
         border: 1,
         refresh_now: true,
       });
-      this._showToast("Display refresh sent (white → black)", "success");
+      this._showToast("Display refresh sent", "success");
     } catch (e: any) {
       this._showToast(e.message || "Refresh failed", "error");
     } finally {
