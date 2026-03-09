@@ -63,6 +63,16 @@ export const cardStyles = css`
     color: var(--md-on-surface);
   }
 
+  /* ---- Device selector ---- */
+
+  .device-selector {
+    padding: 10px 14px 0;
+  }
+
+  .device-select {
+    width: 100%;
+  }
+
   /* ---- Device header ---- */
 
   .device-header {
@@ -474,5 +484,68 @@ export const cardStyles = css`
   .toast.error {
     background: color-mix(in srgb, var(--md-error) 15%, transparent);
     color: var(--md-error);
+  }
+
+  /* ---- Debug panel ---- */
+
+  .debug-panel {
+    padding: 10px 14px 14px;
+    background: color-mix(in srgb, var(--md-on-surface) 4%, transparent);
+  }
+
+  .debug-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--md-on-surface-var);
+    margin-bottom: 8px;
+  }
+
+  .debug-title ha-icon {
+    --mdc-icon-size: 14px;
+  }
+
+  .debug-section {
+    margin-bottom: 8px;
+  }
+
+  .debug-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .debug-label {
+    font-size: 0.68em;
+    color: var(--md-on-surface-var);
+    font-family: monospace;
+    line-height: 1.6;
+    word-break: break-all;
+  }
+
+  .debug-entity {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--md-outline);
+  }
+
+  .debug-entity:last-child {
+    border-bottom: none;
+  }
+
+  .debug-eid {
+    font-size: 0.68em;
+    font-family: monospace;
+    font-weight: 600;
+    color: var(--md-primary);
+  }
+
+  .debug-state,
+  .debug-attrs {
+    font-size: 0.65em;
+    font-family: monospace;
+    color: var(--md-on-surface-var);
+    word-break: break-all;
   }
 `;

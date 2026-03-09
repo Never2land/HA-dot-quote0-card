@@ -122,6 +122,17 @@ export class DotQuote0CardEditor extends LitElement {
           </label>
         </div>
         <div class="field">
+          <label>
+            <input
+              type="checkbox"
+              .checked=${this._config.debug_mode === true}
+              @change=${(e: Event) =>
+                this._checkboxChanged("debug_mode", e)}
+            />
+            Debug mode (shows Clear Ghosting)
+          </label>
+        </div>
+        <div class="field">
           <label class="text-label">Gemini API Key (for AI art generation)</label>
           <input
             type="password"

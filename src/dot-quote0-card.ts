@@ -28,6 +28,7 @@ export class DotQuote0Card extends LitElement {
 
   @state() private _sendTextExpanded = false;
   @state() private _sendImageExpanded = false;
+  @state() private _allDevices: DotDevice[] = [];
 
   private _hass!: Hass;
 
@@ -47,6 +48,7 @@ export class DotQuote0Card extends LitElement {
   private async _resolveDevice(): Promise<void> {
     try {
       const devices = await discoverDevices(this._hass);
+      this._allDevices = devices;
       this._device = findDevice(devices, this._config.device_id);
       this._resolved = true;
     } catch {
@@ -112,6 +114,23 @@ export class DotQuote0Card extends LitElement {
       }
     }
     return [];
+  }
+
+  private _getDebugEntityInfo(): Array<{ eid: string; state: string; attrs: string[] }> {
+    if (!this._device) return [];
+    const info: Array<{ eid: string; state: string; attrs: string[] }> = [];
+    for (const suffix of Object.keys(this._device.entities)) {
+      const eid = this._device.entities[suffix];
+      const entity = this.hass?.states[eid];
+      if (entity) {
+        info.push({
+          eid,
+          state: entity.state,
+          attrs: Object.keys(entity.attributes),
+        });
+      }
+    }
+    return info;
   }
 
   // ---- Icon helpers ----
@@ -542,6 +561,7 @@ export class DotQuote0Card extends LitElement {
   }
 
   private _renderRefreshDisplay() {
+    if (!this._config.debug_mode) return nothing;
     return html`
       <div class="next-content-row">
         <button
@@ -552,6 +572,46 @@ export class DotQuote0Card extends LitElement {
           <ha-icon icon="mdi:monitor-shimmer"></ha-icon>
           ${this._refreshing ? "Refreshing…" : "Clear Ghosting"}
         </button>
+      </div>
+    `;
+  }
+
+  private _handleDeviceSwitch(ev: Event) {
+    const value = (ev.target as HTMLSelectElement).value;
+    if (!value || value === this._config.device_id) return;
+    this._config = { ...this._config, device_id: value };
+    this._resolved = false;
+    this._device = undefined;
+    this._resolveDevice();
+    // Persist the change to the card config
+    const event = new CustomEvent("config-changed", {
+      detail: { config: this._config },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
+
+  private _renderDeviceSelector() {
+    if (this._allDevices.length <= 1) return nothing;
+    return html`
+      <div class="device-selector">
+        <select
+          class="md3-select device-select"
+          .value=${this._config.device_id}
+          @change=${this._handleDeviceSwitch}
+        >
+          ${this._allDevices.map(
+            (d) => html`
+              <option
+                value=${d.dot_device_id}
+                ?selected=${this._config.device_id === d.dot_device_id}
+              >
+                ${d.name}
+              </option>
+            `,
+          )}
+        </select>
       </div>
     `;
   }
@@ -712,6 +772,38 @@ export class DotQuote0Card extends LitElement {
     `;
   }
 
+  private _renderDebugPanel() {
+    const entities = this._getDebugEntityInfo();
+    const images = this._getPreviewImages();
+    return html`
+      <div class="divider"></div>
+      <div class="debug-panel">
+        <div class="debug-title">
+          <ha-icon icon="mdi:bug-outline"></ha-icon>
+          Debug Info
+        </div>
+        <div class="debug-section">
+          <div class="debug-label">Device ID: ${this._device?.dot_device_id ?? "none"}</div>
+          <div class="debug-label">HA Device ID: ${this._device?.ha_device_id ?? "none"}</div>
+          <div class="debug-label">Preview images found: ${images.length}</div>
+          ${images.map((img, i) => html`
+            <div class="debug-label">Image ${i}: ${img.substring(0, 80)}…</div>
+          `)}
+        </div>
+        <div class="debug-section">
+          <div class="debug-label">Entities (${entities.length}):</div>
+          ${entities.map((e) => html`
+            <div class="debug-entity">
+              <div class="debug-eid">${e.eid}</div>
+              <div class="debug-state">State: ${e.state}</div>
+              <div class="debug-attrs">Attrs: ${e.attrs.join(", ")}</div>
+            </div>
+          `)}
+        </div>
+      </div>
+    `;
+  }
+
   protected render() {
     if (!this._config || !this.hass) {
       return html`<ha-card>Loading...</ha-card>`;
@@ -727,6 +819,7 @@ export class DotQuote0Card extends LitElement {
 
     return html`
       <ha-card>
+        ${this._renderDeviceSelector()}
         ${this._renderHero()}
         ${this._renderInfo()}
         <div class="divider"></div>
@@ -735,6 +828,7 @@ export class DotQuote0Card extends LitElement {
         <div class="divider"></div>
         ${this._renderSendText()}
         ${this._renderSendImage()}
+        ${this._config.debug_mode ? this._renderDebugPanel() : nothing}
         ${this._toast
           ? html`<div class="card-footer">
               <div class="toast ${this._toastType}">${this._toast}</div>
